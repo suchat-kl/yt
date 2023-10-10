@@ -1,0 +1,64 @@
+<app-menu></app-menu>
+
+
+
+<div class="container"  style="width:350px;">
+  <form #userForm="ngForm" (ngSubmit)="onclick(userForm.value)">
+
+
+    <div class="row" style="background-color: rgb(221, 226, 238);">
+      <div class="col-12 col-sm-4  mt-4 mb-1 ">
+        <span class="p-float-label">
+          <!-- [(ngModel)]="userName" -->
+          <!-- <input id="userName" name="userName" type="text"
+                readonly
+                pInputText ngModel required minlength="3"
+                  style="width:8rem ;" #userName="ngModel"> -->
+          <input id="userName" name="userName" type="text" readonly [(ngModel)]="userName" #userNamelocal="ngModel"
+            pInputText style="width:20rem ;">
+
+          <label for="userName">ชื่อผู้ใช้งาน</label>
+        </span>
+      </div>
+    </div>
+    <div class="row" style="background-color: rgb(221, 226, 238);">
+      <div class="col-12 col-sm-4  mt-4 mb-1">
+        <p-password placeholder="รหัสผ่าน" id="password" name="password" #password="ngModel" [toggleMask]="true" ngModel
+          required minlength="6">
+        </p-password>
+      </div>
+    </div>
+    <div class="row" style="background-color: rgb(221, 226, 238);">
+      <div class="col-12 col-sm-8 mt-4 mb-1 ">
+        <button pButton pRipple type="submit" label="เปลี่ยนรหัสผ่าน" [disabled]="!userForm.form.valid" class="p-button-rounded">
+          <i class="pi pi-check" style="font-size: 1rem"></i>
+
+        </button>
+      </div>
+    </div>
+
+
+    <div *ngIf="password.errors && (password.dirty || password.touched)" class="alert alert-danger">
+      <div [hidden]="!password.errors['required']">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกรหัสผ่าน
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+        </div>
+      </div>
+    
+    <div [hidden]="!password.errors['minlength']">
+
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกรหัสผ่านความยาว 6 ตัวอักษรขึ้นไป
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+      </div>
+    </div>
+
+
+</div>
+
+
+
+
+</form>
+</div>

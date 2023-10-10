@@ -1,0 +1,98 @@
+<div class="container-fluid">
+  <form #userForm="ngForm" (ngSubmit)="onclick(userForm.value)">
+    <p-menubar [model]="items">
+    
+    
+      <div [hidden]="passLogin">
+        <div class="row" style="background-color: rgb(221, 226, 238);">
+          <div class="col-12 col-sm-4 mr-2 mt-4 mb-1 ">
+            <span class="p-float-label">
+              <!-- [(ngModel)]="userName" -->
+              <input id="userName" name="userName" type="text" pInputText ngModel required minlength="3"
+                style="width:8rem ;" #userName="ngModel">
+              <label for="username">ชื่อผู้ใช้งาน</label>
+            </span>
+          </div>
+          <div class="col-12 col-sm-4 mr-1 mt-4 mb-1">
+            <p-password  placeholder="รหัสผ่าน" id="password" name="password" #password="ngModel" [toggleMask]="true"
+              ngModel required minlength="6">
+            </p-password>
+
+          </div>
+          <div class="col-12 col-sm-4 mt-4 mb-1">
+            <button pButton pRipple type="submit" label="เข้าระบบ" [disabled]="!userForm.form.valid"
+              class="p-button-rounded"><i class="fa fa-sign-in" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div *ngIf="userName.errors && (userName.dirty || userName.touched)" class="alert alert-danger">
+            <div [hidden]="!userName.errors['required']">
+
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกชื่อผู้ใช้งาน
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+              </div>
+            </div>
+
+            <div [hidden]="!userName.errors['minlength']">
+
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกชื่อผู้ใช้งานความยาว 3 ตัวอักษรขึ้นไป
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+              </div>
+            </div>
+          </div>
+          <div *ngIf="password.errors && (password.dirty || password.touched)" class="alert alert-danger">
+            <div [hidden]="!password.errors['required']">
+
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกรหัสผ่าน
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+              </div>
+
+            </div>
+            <div [hidden]="!password.errors['minlength']">
+
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกรหัสผ่านความยาว 6 ตัวอักษรขึ้นไป
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div [hidden]="!passLogin">
+        <div class="row" style="background-color: rgb(221, 226, 238);">
+          <div class="col-12 col-sm-12 mr-2 mt-1 mb-1 ">
+            <span>
+            {{ userNameShow }}   
+            <button pButton pRipple type="submit" label="จบการทำงาน" class="p-button-rounded">
+              <i class="fa fa-sign-in" aria-hidden="true"></i>
+            </button>
+          </span>
+          </div>
+        </div>
+      </div>
+
+    </p-menubar>
+    <p-dialog header="ข้อผิดพลาด" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width: '50vw'}"
+      [baseZIndex]="10000" [(visible)]="display" position="top">
+
+
+      <p style="color: rgb(247, 7, 7);"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i> ชื่อผู้ใช้งาน
+        รหัสผ่าน ไม่ถูกต้อง </p>
+      <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="display=false" label="ตกลง" styleClass="p-button-text"></p-button>
+      </ng-template>
+    </p-dialog>
+    <p-messages severity="info">
+      <ng-template pTemplate>
+          
+              <img src="./assets/images/doh.jpg" width="32" />
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <div class="p-ml-3"> จำนวนผู้ลงทะเบียน: {{cntRegis}}</div>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+          <div> <a target="_blank" class="p-ml-3"  href="https://kkumail-my.sharepoint.com/:b:/p/suchat_kl/EQ5OPSG03_tKvNflOhTiFZ8B6765KK9cEWOGQCtWX-emgQ">คู่มือการใช้งาน</a> </div>
+      </ng-template>
+  </p-messages>
+  </form>
+</div>

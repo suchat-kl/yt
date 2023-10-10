@@ -1,4 +1,12 @@
-import { Component } from '@angular/core';
+
+import { Component,OnInit,ViewEncapsulation } from '@angular/core';
+import {YtServiceService} from './yt-service.service'
+// import { MenuComponent } from './menu/menu.component'; 
+// import {MenuItem} from 'primeng/api';
+// import {PasswordModule} from 'primeng/password';
+
+
+// import {MenubarModule} from 'primeng/menubar';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +14,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'yt';
+  // title = 'ดาวน์โหลดเอกสารภาษีประจำปี';
+  /* userName="";
+  password="" ; */
+
+  
+
+  
+
+  ngOnInit() {
+    
+}
 }

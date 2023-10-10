@@ -1,0 +1,9 @@
+ng build --configuration production
+ng serve
+ng update @angular/cli @angular/core
+npm install @fortawesome/angular-fontawesome
+https://stackoverflow.com/questions/44525746/global-angular-cli-version-greater-than-local-version
+
+https://www.techiediaries.com/angular-bootstrap/
+
+ npm install @angular/forms --save

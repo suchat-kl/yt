@@ -1,0 +1,104 @@
+<app-menu></app-menu>
+<!-- <p>paydate works!</p> -->
+<div class="container">
+    <form [formGroup]="form"  #myForm="ngForm"    (ngSubmit)="process(type)">
+        <div class="form-group">
+        <div class="form-group row">
+            <div class="col-12 col-sm-3    mt-1">
+                <input type="text" id="yearTax" name="yearTax"
+                pattern="[0-9]*" [(ngModel)]="yearTax" pInputText
+                    (change)="changeYearTax($event)"
+                        ngModel required minlength="4" maxlength="4" style="width:8rem ;" 
+                class="form-control" formControlName="yearTax"  title="ค้นหาปี พ.ศ." />
+
+            </div>
+<!-- [disabled]="!myForm.form.valid" -->
+            <div class="col-12 col-sm-2    mt-1">
+                <!-- !userForm.form.valid -->
+                <button pButton pRipple type="submit" label="ค้นหาข้อมูล" 
+                    class="p-button-rounded"  (click)="process('find')"     >
+                    <i class="pi pi-check" style="font-size: 1rem"></i>
+
+                </button>
+            </div>
+            <div class="col-12 col-sm-2   mt-1">
+                <!-- !userForm.form.valid -->
+                <button pButton pRipple type="submit" label="เพิ่มข้อมูล" 
+                    class="p-button-rounded"  (click)="process('add')" >
+                    <i class="pi pi-check" style="font-size: 1rem"></i>
+
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <table class="table">
+            <thead>
+                <tr>
+                    <!-- <th scope="col">Id</th> -->
+                    <th scope="col">วันที่จ่าย</th>
+                    <th scope="col">ปี พ.ศ.</th>
+                    <th scope="col">เดือน</th>
+                    <!-- <th>
+                        <button type="button" title="Add New" class="btn btn-primary" (click)="addUser()">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </th> -->
+                </tr>
+            </thead>
+            <tbody>
+
+                <ng-container *ngFor="let user of users; let i = index">
+                    <tr *ngIf="userSelected != user" (click)="selectUser(user)">
+                        <!-- <td>{{ user.id }}</td> -->
+                        <td>{{ user.eff_date }}</td>
+                        <td>{{ user.pk_eff_date.year }}</td>
+                        <td>{{ user.pk_eff_date.month }}</td>
+                        <!-- <td>
+                            <button class="btn btn-danger btn-sm mx-1" title="delete" type="button"
+                                (click)="deleteUser(i)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td> -->
+                    </tr>
+
+                    <tr *ngIf="userSelected == user" class="table-primary">
+                        <!-- <td>{{ user.id }}</td> -->
+                        <td>
+                            <input type="text" class="form-control" formControlName="eff_date" [value]="user.eff_date"
+                            pattern="[0-9]*"  
+                         style="width:8rem ;" 
+                         
+                            title="วันที่จ่าย" />
+
+                            <!-- <div formControlName="eff_date" contenteditable>
+
+                            </div> -->
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" formControlName="year" [value]="user.pk_eff_date.year" readonly
+                                title="ปี พ.ศ." />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" formControlName="month" [value]="user.pk_eff_date.month"
+                                readonly title="เดือน" />
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm mx-1" title="บันทึก" type="submit" (click)="process('update')"
+                                
+                                >
+                                <i class="bi bi-lightning"></i>
+                            </button>
+<!-- [disabled]="form.invalid" -->
+                            <button class="btn btn-danger btn-sm mx-1" title="ยกเลิก" (click)="cancel()" type="button">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </tbody>
+        </table>
+        </div>
+    </form>
+</div>

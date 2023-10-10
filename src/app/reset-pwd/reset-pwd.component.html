@@ -1,0 +1,142 @@
+<app-menu></app-menu>
+
+
+
+<div class="container" style="width:350px;">
+  <form #userForm="ngForm" (ngSubmit)="onclick(userForm.value)">
+    <div class="row" style="background-color: rgb(221, 226, 238);">
+      <div class="col-12 col-sm-8  mt-4 mb-1 ">
+        <span class="p-float-label">
+
+          <input id="idcard" name="idcard" type="text" [(ngModel)]="idcard" #idcardlocal="ngModel" ngModel required
+            minlength="13" maxlength="13" pattern="[0-9]*" pInputText style="width:20rem ;">
+
+          <label for="idcard">เลขบัตรประชาชน</label>
+        </span>
+      </div>
+    </div>
+    <div class="row" style="background-color: rgb(221, 226, 238);">
+        <div class="col-12 col-sm-12  mt-4 mb-1 ">
+          <span class="p-float-label">
+  
+            <input id="bd" name="bd" type="text" [(ngModel)]="bd" #bdlocal="ngModel" ngModel required
+              minlength="8" maxlength="8" pattern="[0-9]*" pInputText style="width:20rem ;">
+  
+            <label for="idcard">วันเกิด(วันที่สองหลักเดือนสองหลักปีพ.ศ.สี่หลัก)</label>
+          </span>
+        </div>
+      </div>
+
+    <div class="row" style="background-color: rgb(221, 226, 238);">
+      <div class="col-12 col-sm-4  mt-4 mb-1 ">
+        <span class="p-float-label">
+
+          <input id="userName" name="userName" type="text" [(ngModel)]="userName" #userNamelocal="ngModel" ngModel
+           readonly required minlength="3" pInputText style="width:20rem ;">
+
+          <label for="userName">ชื่อผู้ใช้งาน</label>
+        </span>
+      </div>
+    </div>
+    <div class="row" style="background-color: rgb(221, 226, 238);">
+      <div class="col-12 col-sm-4  mt-4 mb-1">
+        <p-password placeholder="รหัสผ่าน" id="password" name="password" #passwordlocal="ngModel" [(ngModel)]="password"
+          [toggleMask]="true" ngModel required minlength="6">
+        </p-password>
+      </div>
+    </div>
+    <div class="row" style="background-color: rgb(221, 226, 238);">
+      <div class="col-12 col-sm-8 mt-4 mb-1 ">
+        <button pButton pRipple type="submit" label="กำหนดรหัสผ่านใหม่" [disabled]="!userForm.form.valid"
+          class="p-button-rounded">
+          <i class="pi pi-check" style="font-size: 1rem"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <div *ngIf="passwordlocal.errors && (passwordlocal.dirty || passwordlocal.touched)" class="alert alert-danger">
+      <div [hidden]= "!passwordlocal.errors['required']" > 
+          <!-- "!passwordlocal.errors.required"> -->
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกรหัสผ่าน
+        </div>
+      </div>
+      <div [hidden]="!passwordlocal.errors['minlength']">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกรหัสผ่านความยาว 6 ตัวอักษรขึ้นไป
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="userNamelocal.errors && (userNamelocal.dirty || userNamelocal.touched)" class="alert alert-danger">
+      <div [hidden]="!userNamelocal.errors['required']">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกชื่อผู้ใช้งาน
+        </div>
+      </div>
+      <div [hidden]="!userNamelocal.errors['minlength']">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกชื่อผู้ใช้งานความยาว 3 ตัวอักษรขึ้นไป
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="idcardlocal.errors && (idcardlocal.dirty || idcardlocal.touched)" class="alert alert-danger">
+      <div [hidden]="!idcardlocal.errors['required']">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกเลขบัตรประชาชน
+        </div>
+      </div>
+      <div [hidden]="!idcardlocal.errors['minlength']">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกเลขบัตรประชาชนความยาว 13 ตัวอักษร
+        </div>
+      </div>
+      <div [hidden]="!idcardlocal.errors['maxlength']">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกเลขบัตรประชาชนความยาว 13 ตัวอักษร
+        </div>
+      </div>
+      <div [hidden]="!idcardlocal.errors['pattern']">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกเลขบัตรประชาชนความยาว 13 ตัวอักษรและเป็นตัวเลข 0-9
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="bdlocal.errors && (bdlocal.dirty || bdlocal.touched)" class="alert alert-danger">
+        <div [hidden]="!bdlocal.errors['required']">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกวันเกิด
+          </div>
+        </div>
+        <div [hidden]="!bdlocal.errors['minlength']">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกวันเกิดความยาว 8 ตัวอักษร
+          </div>
+        </div>
+        <div [hidden]="!bdlocal.errors['maxlength']">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกวันเกิดความยาว 8 ตัวอักษร
+          </div>
+        </div>
+        <div [hidden]="!bdlocal.errors['pattern']">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกวันเกิดความยาว 8 ตัวอักษรและเป็นตัวเลข 0-9
+          </div>
+        </div>
+      </div>
+    <p-dialog header="ข้อผิดพลาด" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width: '50vw'}"
+    [baseZIndex]="10000" [(visible)]="display" position="top">
+
+
+    <p style="color: rgb(247, 7, 7);"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem">
+    </i>{{msg_err}} </p>
+    <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="display=false" label="ตกลง" styleClass="p-button-text"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  </form>
+</div>

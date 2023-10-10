@@ -1,0 +1,155 @@
+<app-menu></app-menu>
+<div class="container" style="width:700px;background-color: rgb(221, 226, 238);">
+    <!--  -->
+
+    <form #userForm="ngForm" (ngSubmit)="onclick(userForm.value)" method="post" enctype="multipart/form-data">
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-5  mt-3">
+                <span class="p-float-label">
+                    <!-- [(ngModel)]="userName" -->
+                    <p>
+                        <input type="radio" value="tax" name="repType" formControlName="repType"
+                            (change)="changeRepType($event)" [checked]="repType=='tax'"> รายงานภาษี
+                        <input type="radio" value="slip" name="repType" formControlName="repType"
+                            (change)="changeRepType($event)" [checked]="repType=='slip'"> รายงานสลิป
+                    </p>
+
+                </span>
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-5  mt-3">
+                <span class="label">
+                    <!-- [(ngModel)]="userName" -->
+                    <label for="yearTax">ปี พ.ศ.  </label>
+                    <input id="yearTax" name="yearTax" type="text" pattern="[0-9]*" [(ngModel)]="yearTax" pInputText
+                        ngModel required minlength="4" maxlength="4" style="width:8rem ;" #yearTaxLocal="ngModel"
+                        (change)="changeYearTax($event)">
+
+                </span>
+            </div>
+        </div>
+
+
+
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-5  mt-3">
+                <!-- <div *ngIf="repType=='slip'">
+                    <h6>เดือนรายงานสลิป:</h6>
+                    <p-dropdown [options]="months" [(ngModel)]="selectedMonth" placeholder="{{titleMonth}}"
+                        optionLabel="name" [showClear]="true"
+                         (change)="changeSelect($event)"
+                        > 
+                    
+                    </p-dropdown>
+
+                </div> -->
+                <!-- [selected]="m.month.toString().trim() == monthV" -->
+
+                <span class="label">
+                    <label for="month">เดือนรายงานสลิป</label>
+                    <select id="month" [disabled]="repType=='tax'" #m class="form-control"
+                    [(ngModel)]="monthV"
+                        (change)="changeSelect($event)">
+                        <option *ngFor="let m of monthName " [disabled]="repType=='tax'"
+                            [selected]="m.month.toString().trim() == monthV" [value]="m.month">
+                            {{m.name}},{{m.month}} </option>
+                    </select>
+                </span>
+<!-- $event -->
+<!-- placeholder="เลือกเดือนรายงานสลิป" -->
+                <!-- <p-dropdown  id="month1" name="month1" #m [(ngModel)]="selectedMonth"  [disabled]="repType=='tax'"
+                  (onChange)="changeSelect($event)" 
+                  
+                  formControlName="month1"
+                [showClear]="true"  [options]="monthName"  optionLabel="name"
+                 dataKey="month"  optionValue="month" 
+                ></p-dropdown> -->
+
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group row">
+            <div class="col-12 "></div>
+            <div class="col-12 col-sm-5 offset-sm-3 mt-3">
+                <!-- !userForm.form.valid -->
+                <button pButton pRipple type="submit" label="รายงาน" [disabled]="!userForm.form.valid"
+                    class="p-button-rounded">
+                    <i class="pi pi-check" style="font-size: 1rem"></i>
+
+                </button>
+            </div>
+        </div>
+
+        <!-- <div class="form-group row">
+            <div class="col-12 "></div>
+            <div class="col-12 col-sm-5 offset-sm-3 mt-3">
+                <div class="alert alert-danger alert-dismissible fade show" role="alertdialog">
+                    <strong>กรณีต้องการใช้รายงานภาษี</strong> ให้เลือกปี พ.ศ.ภาษี กรณีปีล่าสุดจะเป็น พ.ศ.ปัจจุบันลบ
+                    หนึ่ง เดือนให้เลือกเป็น เดือน 00 ซึ่งเป็นค่าเริ่มต้น
+                </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alertdialog">
+                    <strong>กรณีต้องการใช้รายงานสลิป</strong> ให้เลือกปี พ.ศ. เดือนให้เลือกเป็น เดือนซึ่งไม่ใช่ 00
+                </div>
+            </div>
+        </div> -->
+        <!-- <div *ngIf="f.repType.touched && f.repType.invalid" class="alert alert-danger">
+
+            <div *ngIf="f.repType.errors['required']">ต้องเลือกประเภทรายงาน.</div>
+
+        </div> -->
+
+        <div *ngIf="yearTaxLocal.errors && (yearTaxLocal.dirty || yearTaxLocal.touched)" class="alert alert-danger">
+            <div [hidden]="!yearTaxLocal.errors['required']">
+
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกปีภาษี
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+                </div>
+            </div>
+
+            <div [hidden]="!yearTaxLocal.errors['minlength']">
+
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกปีภาษีความยาว 4 ตัวอักษร
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+                </div>
+            </div>
+            <div [hidden]="!yearTaxLocal.errors['pattern']">
+
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกปีภาษีความยาว 4 ตัวอักษร และเป็นตัวเลข
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <p-dialog header="ข้อความ" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width: '50vw'}"
+            [baseZIndex]="10000" [(visible)]="display" position="top">
+
+
+            <p style="color: rgb(247, 7, 7);"> <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                {{msg_err}} </p>
+            <ng-template pTemplate="footer">
+                <p-button icon="pi pi-check" (click)="display=false" label="ตกลง" styleClass="p-button-text"></p-button>
+            </ng-template>
+        </p-dialog>
+    </form>
+</div>

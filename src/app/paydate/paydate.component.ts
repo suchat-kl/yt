@@ -56,6 +56,7 @@ export class PaydateComponent {
     try {
       await firstValueFrom(this.http.post(url, header)).
         then(response => {
+          this.find();
           // let j = JSON.stringify(response);
           // let obj2: LoginApi = JSON.parse(j);
           // console.log(response);
@@ -102,9 +103,11 @@ export class PaydateComponent {
       {
         pk_eff_date: {
           year: "2566",
-          month: "01"
+          month: "01",
+          period: "2"
         },
-        eff_date: "26012566"
+        eff_date: "26012566",
+
       },
 
     ]
@@ -114,12 +117,14 @@ export class PaydateComponent {
 
   form = this.fb.group({
     eff_date: ['', [Validators.required]],
+    period: ['', [Validators.required]],
     year: ['', [Validators.required]],
     month: ['', [Validators.required]],
     yearTax: ['', [Validators.required]]
   });
   // disableProcess: boolean =true;
   yearTax: string = "";
+  period:string="2";
   changeYearTax(e: any) {
     this.yearTax = e.target.value.toString().trim();
 
@@ -140,6 +145,7 @@ export class PaydateComponent {
         this.yearTax = (new Date().getFullYear() + 543).toString();
       this.form.patchValue({
         eff_date: user.eff_date,
+        period: user.pk_eff_date.period,
         year: user.pk_eff_date.year,
         month: user.pk_eff_date.month,
         yearTax: this.yearTax
@@ -171,9 +177,11 @@ export class PaydateComponent {
       this.users[0] = {
         // id: this.generateId(),
         eff_date: this.form.value.eff_date!,
+        
         pk_eff_date: {
           year: this.form.value.year!,
-          month: this.form.value.month!
+          month: this.form.value.month!,
+          period: this.form.value.period!,
         }
         // year: this.form.value.pk_eff_date.year!,
         // month: this.form.value.month!
@@ -204,18 +212,25 @@ export class PaydateComponent {
         return;
       }
 
-      index = this.users.map(u => u.pk_eff_date.month).indexOf(this.userSelected.pk_eff_date.month);
+      index = this.users.map(u => (u.pk_eff_date.month
+        ,  u.pk_eff_date.period,u.pk_eff_date.year)
+        ).indexOf(this.userSelected.pk_eff_date.month,
+          
+          );
 
       this.users[index] = {
         // id: this.userSelected.id,
         eff_date: this.form.value.eff_date!,
+        
         pk_eff_date: {
           year: this.form.value.year!,
-          month: this.form.value.month!
+          month: this.form.value.month!,
+          period: this.form.value.period!,
         }
       };
       //save
       let url = this.ytSv.url + "/updEff_date?yt=" + this.users[index].pk_eff_date.year + "&mt=" + this.users[index].pk_eff_date.month
+      + "&period=" + this.users[index].pk_eff_date.period
         + "&eff_date=" + this.users[index].eff_date;
       let header = {
         headers: new HttpHeaders()
@@ -230,6 +245,7 @@ export class PaydateComponent {
       try {
         await firstValueFrom(this.http.put(url, header)).
           then(response => {
+            this.find();
             // let j = JSON.stringify(response);
             // let obj2: LoginApi = JSON.parse(j);
             // console.log(response);
@@ -293,7 +309,7 @@ export class PaydateComponent {
       // id: '-',
       eff_date: '',
       pk_eff_date: {
-        year: '', month: ''
+        year: '', month: '', period: '2',
       }
       // pk_eff_date.year: '',
       // pk_eff_date.month: ''
@@ -341,7 +357,9 @@ export interface User {
   pk_eff_date: {
     year: string;
     month: string;
+    period: string;
   }
   eff_date: string;
+  
 }
 

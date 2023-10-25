@@ -27,10 +27,10 @@
             <select id="month" [disabled]="process!='slip'" #m class="form-control" (change)="changeSelect($event)">
         
         
-        
+        <option [ngValue]="null" disabled>เลือกเดือนสลิป</option>
                 <option *ngFor="let m of monthName " [disabled]="process!='slip'"
                     [selected]="m.month.toString().trim() == monthV">
-                    {{m.name}},{{m.month}} </option>
+                    {{m.name}} </option>
             </select>
         
         </span>

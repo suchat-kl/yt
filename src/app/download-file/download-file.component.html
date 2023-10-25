@@ -1,4 +1,5 @@
 <app-menu></app-menu>
+
 <div class="container" style="width:700px;background-color: rgb(221, 226, 238);">
     <!--  -->
 
@@ -31,7 +32,7 @@
             <div class="col-12 col-sm-5  mt-3">
                 <span class="label">
                     <!-- [(ngModel)]="userName" -->
-                    <label for="yearTax">ปี พ.ศ.  </label>
+                    <label for="yearTax">ปี พ.ศ. </label>
                     <input id="yearTax" name="yearTax" type="text" pattern="[0-9]*" [(ngModel)]="yearTax" pInputText
                         ngModel required minlength="4" maxlength="4" style="width:8rem ;" #yearTaxLocal="ngModel"
                         (change)="changeYearTax($event)">
@@ -59,16 +60,23 @@
 
                 <span class="label">
                     <label for="month">เดือนรายงานสลิป</label>
-                    <select id="month" [disabled]="repType=='tax'" #m class="form-control"
-                    [(ngModel)]="monthV"
+                    <select id="month" [disabled]="repType=='tax'" #m class="form-control" [(ngModel)]="monthV"
                         (change)="changeSelect($event)">
+                        <option [ngValue]="00" [selected] disabled>เลือกเดือนรายงานสลิป</option>
                         <option *ngFor="let m of monthName " [disabled]="repType=='tax'"
-                            [selected]="m.month.toString().trim() == monthV" [value]="m.month">
-                            {{m.name}},{{m.month}} </option>
+                            [value]="m.month">
+                            {{m.name}} </option>
                     </select>
                 </span>
-<!-- $event -->
-<!-- placeholder="เลือกเดือนรายงานสลิป" -->
+
+<!-- <div class="card flex justify-content-center">
+    <p-dropdown (change)="changeSelect($event)"
+     [options]="monthName" [(ngModel)]="monthV" optionLabel="name" optionValue="month"></p-dropdown>
+</div> -->
+
+
+                <!-- $event -->
+                <!-- placeholder="เลือกเดือนรายงานสลิป"  ,{{m.month}}  -->
                 <!-- <p-dropdown  id="month1" name="month1" #m [(ngModel)]="selectedMonth"  [disabled]="repType=='tax'"
                   (onChange)="changeSelect($event)" 
                   
@@ -79,10 +87,27 @@
 
             </div>
         </div>
+        <!-- -->
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-5  mt-3">
+                <span class="p-float-label">
+                    <!-- [(ngModel)]="userName" -->
+
+                    <fieldset [disabled]="repType=='tax' || ConvertStringToNumber(yearTax) < 2567">
+                        <p>
+                            <input type="radio" value="1" name="period" formControlName="period" [checked]="period=='1'"
+                                (change)="changePeriod($event)"> งวดที่ 1
+                            <input type="radio" value="2" name="period" formControlName="period" [checked]="period=='2'"
+                                (change)="changePeriod($event)"> งวดที่ 2
+                        </p>
+                    </fieldset>
 
 
-
-
+                </span>
+            </div>
+        </div>
+        <!-- -->
         <div class="form-group row">
             <div class="col-12 "></div>
             <div class="col-12 col-sm-5 offset-sm-3 mt-3">

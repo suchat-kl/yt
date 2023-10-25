@@ -8,7 +8,7 @@ export class YtServiceService {
   // private route: ActivatedRoute,
   constructor(private titleService: Title) { }
   // title:string="";
-  private _url = 'https://dbdoh.doh.go.th:9000'; //develop dbdoh production backupdoh
+  private _url = 'https://dbdoh.doh.go.th:27017'; //develop dbdoh production backupdoh
   public get url() {
     return this._url;
   }

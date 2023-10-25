@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { YtServiceService } from '../yt-service.service';
-import { DropdownModule } from 'primeng/dropdown';
+// import { DropdownModule } from 'primeng/dropdown';
 import { firstValueFrom } from 'rxjs';
 
 interface MonthType {
@@ -75,19 +75,20 @@ export class DownloadFileComponent implements OnInit {
   titleMonth: string = "เลือกเดือน";
 
   repType: string = "tax";
+  period: string = "2";
   yearTax: string = "";
-  monthV: string = "01";
-  selectedMonth:MonthType=  {name:"มีนาคม",month:"03"};
+  monthV: string = "00";
+  // selectedMonth: MonthType = { name: "มีนาคม", month: "03" };
   display: boolean = false; msg_err: string = "";
   // titleYear: string = "ปี พ.ศ. ภาษี";
   //e: any
-  changeSelect(e:any) {
-// alert(e.value);
+  changeSelect(e: any) {
+    // alert(e.value);
     // alert(e.target.value);
-    
+
     this.monthV = e.target.value;//     this.m.nativeElement.value.trim().split(",")[1];
     // this.monthV = this.selectedMonth.month;
-// this.monthV=this.selectedMonth.month;
+    // this.monthV=this.selectedMonth.month;
     // this.monthV = this.monthV.trim();
     // this.monthV=e.value;
     this.yearTax = this.yearTax.trim();
@@ -104,19 +105,27 @@ export class DownloadFileComponent implements OnInit {
     }
     else if (this.repType == "slip")
       this.yearTax = (new Date().getFullYear() + 543).toString();
-      // this.titleYear = "ปี พ.ศ.";
+    // this.titleYear = "ปี พ.ศ.";
   }
   changeYearTax(e: any) {
     this.yearTax = e.target.value;
   }
+  changePeriod(e: any) {
+    this.period = e.target.value;
+  }
   form = new FormGroup({
 
     repType: new FormControl('', Validators.required),
-// month1:new FormControl("",Validators.required),
+    // month1:new FormControl("",Validators.required),
 
   });
 
-
+  ConvertStringToNumber(input: string) {
+    if (input.trim().length == 0) {
+      return NaN;
+    }
+    return Number(input);
+  }
 
   get f() {
 
@@ -135,11 +144,21 @@ export class DownloadFileComponent implements OnInit {
     // console.log(this.monthV);
 
     this.yearTax = this.yearTax.trim();
-    if (this.repType == "tax") this.monthV = "00";
+    if (this.repType == "tax") {
+      this.monthV = "00";
+      this.period = "2";
+    }
     else {
+      if (this.ConvertStringToNumber(this.yearTax) < 2567)
+        this.period = "2";
       // this.monthV = this.m.nativeElement.value;
       // this.monthV = this.monthV.split(",")[1];
+
+      if (this.ConvertStringToNumber(this.monthV) == 0) {
+        alert("ต้องเลือกเดือนก่อน"); return;
+      }
     }
+
     // if (this.monthV==null) {
     //   alert("ต้องทำการเลือกเดือนก่อน..");return;
     // }
@@ -149,7 +168,7 @@ export class DownloadFileComponent implements OnInit {
 
     // this.monthV = this.m.nativeElement.value;
     // this.monthV = this.monthV.split(",")[1];
-    let url = this.ytSv.url + "/repYT/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV;
+    let url = this.ytSv.url + "/repYT/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV +"&period="+this.period;
     // alert(this.monthV);
     // alert(url);
     // return;
@@ -169,18 +188,18 @@ export class DownloadFileComponent implements OnInit {
     // return;
 
     try {
-      await firstValueFrom( this.http.get(url, header)).
+      await firstValueFrom(this.http.get(url, header)).
         then(response => {
           // let j = JSON.stringify(response);
           // let obj2: LoginApi = JSON.parse(j);
           // console.log(response);
           // console.log("success");
           //downloadFile
-          window.open(this.ytSv.url + "/downloadRep/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV, "_blank");
-        
+          window.open(this.ytSv.url + "/downloadRep/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV+"&period="+this.period, "_blank");
+
         });
 
-     
+
 
 
 
@@ -222,14 +241,15 @@ export class DownloadFileComponent implements OnInit {
     else if (this.repType == "slip")
       this.yearTax = (new Date().getFullYear() + 543).toString();
 
-    this.monthV = '0' + (new Date().getMonth() + 1).toString().slice(-2);
+    // this.monthV = '0' + (new Date().getMonth() + 1).toString().slice(-2);
+    // this.repType="slip";
     // this.m.nativeElement.optionValue=this.monthV;
-    // this.m.nativeElement.optionLabel="มีนาคม";
-    
+    // this.m.nativeElement.optionLabel = this.monthName[Number(this.monthV) - 1].name;
+
     // this.form.controls.month1.setValue(this.monthV);
-    
+
     // this.selectedMonth= { name: "มีนาคม", month: "03" };
-    
+
     // this.selectedMonth.month=    this.monthV;
     // this.selectedMonth.name = this.monthName[Number(this.monthV)-1  ].name;
     // alert(this.monthV);

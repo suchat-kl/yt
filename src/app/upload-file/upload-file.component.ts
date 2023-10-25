@@ -79,7 +79,7 @@ export class UploadFileComponent implements OnInit {
     c75: string; c76: string; c77: string; c78: string;
     c79: string; sahaDeps: string; sahaTotl: string; loanOth: string;
     club: string; posno: string; eff_date: string; insr: string;
-    divcode: string;
+    divcode: string;period:string
 
   } = {
       year: "", month: "", id_card: "", title: "",
@@ -104,7 +104,7 @@ export class UploadFileComponent implements OnInit {
       c75: "", c76: "", c77: "", c78: "",
       c79: "", sahaDeps: "", sahaTotl: "", loanOth: "",
       club: "", posno: "", eff_date: "", insr: "",
-      divcode: "",
+      divcode: "",period:""
 
     };
   jsonOutputSlipArr: {
@@ -131,7 +131,7 @@ export class UploadFileComponent implements OnInit {
     c75: string; c76: string; c77: string; c78: string;
     c79: string; sahaDeps: string; sahaTotl: string; loanOth: string;
     club: string; posno: string; eff_date: string; insr: string;
-    divcode: string;
+    divcode: string;period:string;
   }[] = [];
 
   jsonOutput: {
@@ -300,6 +300,7 @@ export class UploadFileComponent implements OnInit {
           });
         }
         else if (this.process == "slip") {
+          // period
           /*
            if (sessionStorage.getItem("dStr") == null) {
              // this.dateNum = data[19];
@@ -388,7 +389,7 @@ export class UploadFileComponent implements OnInit {
 
             "sahaDeps": "", "sahaTotl": "", "loanOth": "",
             "club": "", "posno": "", "eff_date": "", "insr": "",
-            "divcode": ""
+            "divcode": "","period":"2"
           });
 
 

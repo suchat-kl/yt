@@ -1,7 +1,8 @@
 ng build --configuration production
 ng serve
-ng update @angular/cli @angular/core
+
 npm update primeng --save
+ng update @angular/cli @angular/core
 npm install @fortawesome/angular-fontawesome
 https://stackoverflow.com/questions/44525746/global-angular-cli-version-greater-than-local-version
 

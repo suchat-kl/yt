@@ -72,14 +72,16 @@ export class DownloadFileComponent implements OnInit {
   //   }
   // ];
   monthName: MonthType[] = [];
+  // strIntoObj:string[]  = [];
   titleMonth: string = "เลือกเดือน";
-
+  hidePeriod: boolean = true;
   repType: string = "tax";
   period: string = "2";
   yearTax: string = "";
   monthV: string = "00";
   // selectedMonth: MonthType = { name: "มีนาคม", month: "03" };
   display: boolean = false; msg_err: string = "";
+  // has2Period: boolean = false;
   // titleYear: string = "ปี พ.ศ. ภาษี";
   //e: any
   changeSelect(e: any) {
@@ -97,18 +99,59 @@ export class DownloadFileComponent implements OnInit {
   }
   changeRepType(e: any) {
     this.repType = e.target.value;
+    // this.isDisabledPeriod();
     // alert(this.monthV);
     if (this.repType == "tax") {
       this.yearTax = (new Date().getFullYear() + 543 - 1).toString();
       this.m.nativeElement.disabled;
+      this.hidePeriod = true;
       // this.titleYear = "ปี พ.ศ. ภาษี";
     }
-    else if (this.repType == "slip")
+    else if (this.repType == "slip") {
       this.yearTax = (new Date().getFullYear() + 543).toString();
-    // this.titleYear = "ปี พ.ศ.";
+      this.chkPeriod();
+      // else {
+      //   this.hidePeriod=true;
+      // }
+
+      // this.titleYear = "ปี พ.ศ.";
+
+
+    } //slip
   }
   changeYearTax(e: any) {
     this.yearTax = e.target.value;
+    this.chkPeriod();
+    // this.isDisabledPeriod();
+    
+    // else {
+    //   this.hidePeriod = true;
+    // }
+
+  }
+  chkPeriod(){
+    this.hidePeriod = true;
+    if (sessionStorage.getItem('has2Period') === 'true') {
+      if (this.ConvertStringToNumber(this.yearTax) > 2566) {
+        this.hidePeriod = false;
+      }
+    }
+    if (this.hidePeriod) return;
+    const a = sessionStorage.getItem('year')
+    const strIntoObj = a ?
+      JSON.parse(a) : [];
+
+    const findNum = strIntoObj.find((elem: string) => elem == this.yearTax);
+    
+    if (findNum == undefined) this.hidePeriod=true;
+    //else alert("found year");
+
+    /*alert(strIntoObj+"$$obj");
+           alert("0=" + strIntoObj[0] );
+           alert( ",size=" + strIntoObj.length );
+           alert( " done="+   ((strIntoObj[0].toString())=="2567") );
+           */
+
   }
   changePeriod(e: any) {
     this.period = e.target.value;
@@ -132,6 +175,14 @@ export class DownloadFileComponent implements OnInit {
     return this.form.controls;
 
   }
+  // isDisabledPeriod(): boolean {
+  //   if (this.repType == "slip" && this.has2Period && this.ConvertStringToNumber(this.yearTax) >= 2567) {
+  //     this.hidePeriod = false;
+  //   }
+  //   else { this.hidePeriod = true; }
+
+  //   return this.hidePeriod;
+  // }
   // onSelectedS(): void {
   //   this.monthV = this.m.nativeElement.value;
   // }
@@ -142,6 +193,10 @@ export class DownloadFileComponent implements OnInit {
     let tmpMonth = this.monthV;
     // this.monthV=this.selectedMonth.month;
     // console.log(this.monthV);
+    // (sessionStorage.getItem('has2Period') === 'true')
+
+    // if (sessionStorage.getItem('has2Period') === 'true') { console.log(""); }
+    // else { this.period = "2"; }
 
     this.yearTax = this.yearTax.trim();
     if (this.repType == "tax") {
@@ -168,7 +223,7 @@ export class DownloadFileComponent implements OnInit {
 
     // this.monthV = this.m.nativeElement.value;
     // this.monthV = this.monthV.split(",")[1];
-    let url = this.ytSv.url + "/repYT/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV +"&period="+this.period;
+    let url = this.ytSv.url + "/repYT/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV + "&period=" + this.period;
     // alert(this.monthV);
     // alert(url);
     // return;
@@ -195,7 +250,7 @@ export class DownloadFileComponent implements OnInit {
           // console.log(response);
           // console.log("success");
           //downloadFile
-          window.open(this.ytSv.url + "/downloadRep/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV+"&period="+this.period, "_blank");
+          window.open(this.ytSv.url + "/downloadRep/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV + "&period=" + this.period, "_blank");
 
         });
 
@@ -217,7 +272,11 @@ export class DownloadFileComponent implements OnInit {
   }//on click
   constructor(private routeA: ActivatedRoute, private ytSv: YtServiceService,
     private route: Router, private http: HttpClient) {
-    // this.months=this.monthName;
+    // if (sessionStorage.getItem('has2Period') === 'true')
+    //   this.has2Period = true;
+    // else
+    //   this.has2Period = false;
+
   }
   // processChange() {
   //   if (this.processType == "tax")
@@ -230,9 +289,11 @@ export class DownloadFileComponent implements OnInit {
       this.route.navigate(['']);
       return;
     }
+
     this.routeA.queryParams
       .subscribe(params => {
         this.ytSv.setTitle(params['title']);
+        // this.has2Period=params['has2Period'];
       }
       );
     this.monthName = this.ytSv.monthName;

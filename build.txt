@@ -9,3 +9,7 @@ https://stackoverflow.com/questions/44525746/global-angular-cli-version-greater-
 https://www.techiediaries.com/angular-bootstrap/
 
  npm install @angular/forms --save
+
+ ng g component product
+ ng g class user
+ ng g service authentication

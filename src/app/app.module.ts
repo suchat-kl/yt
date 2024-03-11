@@ -31,6 +31,7 @@ import { ResetPwdComponent } from './reset-pwd/reset-pwd.component';
 import { UploadImgComponent } from './upload-img/upload-img.component';
 import {MessagesModule} from 'primeng/messages';
 import { PaydateComponent } from './paydate/paydate.component';
+import { ChangeusrComponent } from './changeusr/changeusr.component';
 
 // import { PdfViewerModule } from 'ng2-pdf-viewer';
 
@@ -46,7 +47,8 @@ import { PaydateComponent } from './paydate/paydate.component';
     ChangePwdComponent,
     ResetPwdComponent,
     UploadImgComponent,
-    PaydateComponent
+    PaydateComponent,
+    ChangeusrComponent
   ],
   imports: [
     ReactiveFormsModule,

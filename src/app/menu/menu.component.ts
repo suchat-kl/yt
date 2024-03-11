@@ -40,6 +40,8 @@ export class MenuComponent {
   // password="" ;
   cntRegis: number = 0;
   _url: string = "";
+  
+  // has2Period: boolean = false;
   async cntUsr() {
     this._url = this.ytSv.url + '/cntRigister';
     try {//this.loginJson
@@ -104,6 +106,7 @@ export class MenuComponent {
 
   logOut() {
     this.passLogin = false;
+    // alert(sessionStorage.getItem('has2Period'));
     //sessionStorage.removeItem("cntUsr");
     sessionStorage.removeItem("userName");
     sessionStorage.removeItem("passLogin");
@@ -112,6 +115,8 @@ export class MenuComponent {
     sessionStorage.removeItem("mnuChangePwd");
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("id");
+    sessionStorage.removeItem("has2Period");
+    sessionStorage.removeItem("year");
     this.showMenu();
     this.route.navigate(['/register']);
     this.route.navigate(['']);
@@ -266,9 +271,45 @@ export class MenuComponent {
       }, error => {
         console.log(JSON.stringify(error));
       });
+    // chk2Period
+    // Map < String, String > res = new HashMap<>();
+    this.url = this.ytSv.url + '/user2Period/' + sessionStorage.getItem("idcard");
+    console.log(this.url);
+    header = {
+      headers: new HttpHeaders()
+        .set('Authorization', "Bearer " + sessionStorage.getItem("token")) //   this.response["accessToken"])
+    }
+    // this.response = await this.http.get(this.url, header).toPromise();
+    // console.log(this.response); <UserDetail[]>
+    // this.http.get(this.url, header)
+    //   .subscribe(response => {
+    await firstValueFrom(this.http.get(this.url, header)).
+      then(response => {
+        //console.log(JSON.stringify(response));
+        let j = JSON.stringify(response);
 
+        let obj5 = JSON.parse(j);
+        // console.log(obj5);
+        // console.log("***"+obj5.found+"*******");
+        // console.log(JSON.stringify(obj2))
+        // this.obj3=response;
+        if (obj5.found == "true") {
+          sessionStorage.setItem('has2Period', 'true');
+          sessionStorage.setItem('year', obj5.year);
+          
+         
+        }
+        else {
+          sessionStorage.setItem('year', '');
+          sessionStorage.setItem('has2Period', 'false');
+        }
+        // alert('2period'+sessionStorage.getItem('has2Period'));
+      }, error => {
+        console.log(JSON.stringify(error));
+      });
+    //chk2Period
 
-  }
+  } //login
 
   // mnuStatus={"mnuUploadFile":true,"mnuDownloadFile":true};
   items: MenuItem[] = [];
@@ -371,8 +412,14 @@ export class MenuComponent {
             // disabled: resetPwd,
             routerLink: ['/resetpwd'],
             queryParams: { 'title': this.mnuStr[5]["resetpwd"] },
-
-
+          }
+          ,
+          {
+            label: this.mnuStr[9]["changeusr"],
+            icon: 'pi pi-fw pi-user',
+            // disabled: resetPwd,
+            routerLink: ['/changeusr'],
+            queryParams: { 'title': this.mnuStr[9]["changeusr"] },
           }
         ]
       },
@@ -393,8 +440,9 @@ export class MenuComponent {
     { "resetpwd": "กำหนดรหัสผ่านใหม่" },
     { "uploadimg": "เตรียมไฟล์ลายเซ็นต์" },
     { "manual": "คู่มือ" },
-    { "paydate": "วันที่จ่าย" }
+    { "paydate": "วันที่จ่าย" },
+    {"changeusr":"เปลี่ยนชื่อผู้ใช้งาน"}
   ];
-//"ดาวน์โหลดไฟล์ภาษีสลิปเงินเดือน"
+  //"ดาวน์โหลดไฟล์ภาษีสลิปเงินเดือน"
 }
 

@@ -10,7 +10,7 @@ import { ChangePwdComponent } from './change-pwd/change-pwd.component';
 import { ResetPwdComponent } from './reset-pwd/reset-pwd.component';
 import { UploadImgComponent } from './upload-img/upload-img.component';
 import { PaydateComponent } from './paydate/paydate.component';
-
+import { ChangeusrComponent } from './changeusr/changeusr.component';
 const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'register', component: RegisterComponent },
@@ -20,6 +20,7 @@ const routes: Routes = [
   { path: 'changepwd', component: ChangePwdComponent },
   { path: 'resetpwd', component: ResetPwdComponent },
   { path: 'paydate', component: PaydateComponent },
+  { path: 'changeusr',component:ChangeusrComponent},
   { path: '**', component: IndexComponent }, //this is last line only
 ];
 

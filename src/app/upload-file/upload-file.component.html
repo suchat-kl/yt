@@ -17,7 +17,18 @@
                 </span>
             </div>
         </div>
-
+<!-- <div class="form-group row">
+    <div class="col-12 col-sm-3"></div>
+    <div class="col-12 col-sm-5  mt-3">
+        <span class="p-float-label">
+            
+            <input  [disabled]="process!='slip'"   id="period" name="period" type="text" pattern="[1-2]*" [(ngModel)]="period" pInputText
+                (change)="changePeriod($event)" ngModel required minlength="1" maxlength="1" style="width:8rem ;"
+                #periodLocal="ngModel">
+            <label for="period">งวดที่(1/2)</label>
+        </span>
+    </div>
+</div> -->
 <div class="form-group row">
     <div class="col-12 col-sm-3"></div>
     <div class="col-12 col-sm-5  mt-3">
@@ -136,6 +147,33 @@
                 </div>
             </div>
         </div>
+
+<!-- <div *ngIf="periodLocal.errors && (periodLocal.dirty || periodLocal.touched)" class="alert alert-danger">
+    <div [hidden]="!periodLocal.errors['required']">
+
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกงวด ค่า 1/2
+          
+        </div>
+    </div>
+
+    <div [hidden]="!periodLocal.errors['minlength']">
+
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกความยาว 1 ตัวอักษร ค่า 1/2
+           
+        </div>
+    </div>
+    <div [hidden]="!periodLocal.errors['pattern']">
+
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>การบันทึกข้อมูล!</strong> ต้องบันทึกความยาว 1 ตัวอักษร และเป็นตัวเลข ค่า 1/2
+           
+        </div>
+    </div>
+</div> -->
+
+
         <p-dialog header="ข้อความ" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width: '50vw'}"
             [baseZIndex]="10000" [(visible)]="display" position="top">
 

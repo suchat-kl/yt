@@ -67,20 +67,28 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+              "options": {
+                "buildTarget": "yt:build",
+                "proxyConfig": "src/proxy.conf.json"
+              },
           "configurations": {
             "production": {
-              "browserTarget": "yt:build:production"
+              "buildTarget": "yt:build:production"
+             
             },
             "development": {
-              "browserTarget": "yt:build:development"
+              "buildTarget": "yt:build:development"             
+                
+             
             }
           },
           "defaultConfiguration": "development"
         },
+       
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "yt:build"
+            "buildTarget": "yt:build"
           }
         },
         "test": {

@@ -33,6 +33,15 @@
     <div class="col-12 col-sm-3"></div>
     <div class="col-12 col-sm-5  mt-3">
         <span class="label">
+            <label for="month">เดือนรายงานสลิป</label>
+            <select id="month" [disabled]="process!='slip'" #m class="form-control" [(ngModel)]="monthV"
+                (change)="changeSelect($event)">
+                <option [value]="00" disabled>เลือกเดือนรายงานสลิป</option>
+                <option *ngFor="let m of monthName " [disabled]="process!='slip'" [value]="m.month">
+                    {{m.name}} </option>
+            </select>
+        </span>
+        <!-- <span class="label">
             <label for="month">เดือนสลิป</label>
         
             <select id="month" [disabled]="process!='slip'" #m class="form-control" (change)="changeSelect($event)">
@@ -44,7 +53,7 @@
                     {{m.name}} </option>
             </select>
         
-        </span>
+        </span> -->
 </div></div>
 
 <div class="form-group row">

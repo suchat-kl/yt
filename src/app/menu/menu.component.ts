@@ -12,6 +12,7 @@ import { RouteConfigLoadEnd, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { YtServiceService } from '../yt-service.service';
 import { firstValueFrom } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
@@ -35,13 +36,22 @@ import { firstValueFrom } from 'rxjs';
   // providers: [MessageService]
 })
 export class MenuComponent {
+  // thaid:boolean=false;
+  thaidUrl:string="";
+displayHTML: any;
+// onThaidClick() {
+// this.thaid=true;
+// }
   // title = 'ดาวน์โหลดเอกสารภาษีประจำปี';
   // userName:any;
   // password="" ;
   cntRegis: number = 0;
   _url: string = "";
-  
+
   // has2Period: boolean = false;
+  getRandomInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
   async cntUsr() {
     this._url = this.ytSv.url + '/cntRigister';
     try {//this.loginJson
@@ -58,10 +68,14 @@ export class MenuComponent {
     catch (err) { }
   }
   chk: any;
+  state:Number=0;
+  // redirect_uri: string ="http://localhost:4200/yt";
   ngOnInit() {
     //  this.chk=sessionStorage.getItem("cntUsr")+"";
     if (this.cntRegis == 0) { this.cntUsr(); }
     this.showMenu();
+    this.state=this.getRandomInt(1,100);
+    this.thaidUrl = "https://imauth.bora.dopa.go.th/api/v2/oauth2/auth/?response_type=code&client_id=bnVzQ2J1NXUwYnV3NmpwdWRDcGlwYWdXa3B4emV4aHo&redirect_uri=" + this.ytSv.redirect_url +"&scope=pid&state="+this.state;
     // this._url = this.ytSv.url + '/cntRigister';
     // this.http.get(this._url)
     //   .subscribe(response => {
@@ -75,6 +89,7 @@ export class MenuComponent {
   display: boolean = false;
   data: any;
   url: string = this.ytSv.url + '/login';
+  urlThaid:string="";
   loginJson = {
 
     "username": "",
@@ -83,8 +98,11 @@ export class MenuComponent {
   }
   // response!: LoginApi;
   constructor(private http: HttpClient, private route: Router, private usr: UserService
-    , private ytSv: YtServiceService) {
-    if (sessionStorage.getItem('userName') == null) {
+    , private ytSv: YtServiceService, private sanitizer: DomSanitizer) {
+    // if (sessionStorage.getItem('redirect_uri') == null) {
+    //   sessionStorage.setItem('redirect_uri', this.redirect_uri);
+    // }
+      if (sessionStorage.getItem('userName') == null) {
       sessionStorage.setItem('userName', '');
     }
     if (sessionStorage.getItem('passLogin') == null) {
@@ -108,6 +126,7 @@ export class MenuComponent {
     this.passLogin = false;
     // alert(sessionStorage.getItem('has2Period'));
     //sessionStorage.removeItem("cntUsr");
+    // sessionStorage.removeItem("redirect_uri");
     sessionStorage.removeItem("userName");
     sessionStorage.removeItem("passLogin");
     sessionStorage.removeItem("mnuFileUpload");
@@ -124,6 +143,18 @@ export class MenuComponent {
     this.cntUsr();
   }
   onclick(value: any): void {
+    // if (this.thaid){
+    //    alert(this.thaid);
+    //   this.urlThaid ="https://imauth.bora.dopa.go.th/api/v2/oauth2/auth/?response_type=code&client_id=bnVzQ2J1NXUwYnV3NmpwdWRDcGlwYWdXa3B4emV4aHo&redirect_uri=https://dbdoh.doh.go.th/thaidcallback&scope=pid%20name%20birthdate&state=gTvgsHomhv'ahkoyjows,";
+    //   this.http.get("urlThaid", { responseType: "text" }).subscribe(response => {
+    //     this.displayHTML = this.sanitizer.bypassSecurityTrustHtml(response);
+    //   })
+       
+    //    return;
+    // }
+   
+
+
     if (this.passLogin) {
       this.logOut();
 
@@ -296,8 +327,8 @@ export class MenuComponent {
         if (obj5.found == "true") {
           sessionStorage.setItem('has2Period', 'true');
           sessionStorage.setItem('year', obj5.year);
-          
-         
+
+
         }
         else {
           sessionStorage.setItem('year', '');
@@ -441,7 +472,7 @@ export class MenuComponent {
     { "uploadimg": "เตรียมไฟล์ลายเซ็นต์" },
     { "manual": "คู่มือ" },
     { "paydate": "วันที่จ่าย" },
-    {"changeusr":"เปลี่ยนชื่อผู้ใช้งาน"}
+    { "changeusr": "เปลี่ยนชื่อผู้ใช้งาน" }
   ];
   //"ดาวน์โหลดไฟล์ภาษีสลิปเงินเดือน"
 }

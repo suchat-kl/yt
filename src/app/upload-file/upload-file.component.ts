@@ -29,11 +29,12 @@ export class UploadFileComponent implements OnInit {
   }
   changeSelect(e: any) {
 
-    // alert(e.target.value);
-    this.monthV = this.m.nativeElement.value.trim().split(",")[1];
-    // this.monthV = this.selectedMonth.month;
+    // alert("target "+e.target.value);
+    // this.monthV = this.m.nativeElement.value.trim().split(",")[1];
+    // // this.monthV = this.selectedMonth.month;
 
-    this.monthV = this.monthV.trim();
+    // this.monthV = this.monthV.trim();
+    this.monthV = e.target.value;
     this.yearTax = this.yearTax.trim();
     // alert(this.monthV);
   }
@@ -43,12 +44,12 @@ export class UploadFileComponent implements OnInit {
     if (this.process != "slip") {
       this.yearTax = (new Date().getFullYear() + 543 - 1).toString();
       this.m.nativeElement.disabled
-      
+
       // this.titleYear = "ปี พ.ศ. ภาษี";
     }
     else {
       this.yearTax = (new Date().getFullYear() + 543).toString();
-    // this.titleYear = "ปี พ.ศ.";
+      // this.titleYear = "ปี พ.ศ.";
     }
   }
   monthV: string = "";
@@ -56,7 +57,7 @@ export class UploadFileComponent implements OnInit {
   process: string = "retired"; //present
   disableInsert: boolean = true;
   disableDelete: boolean = true;
-  period:string="2";//will be edit
+  period: string = "2";//will be edit
   //disableUpdate: boolean = true;
   // sizeMax = false;
   // isTxt = false;
@@ -84,14 +85,14 @@ export class UploadFileComponent implements OnInit {
     c71: string; c72: string; c73: string; c74: string;
     c75: string; c76: string; c77: string; c78: string;
     c79: string; sahaDeps: string; sahaTotl: string; loanOth: string;
-    club: string; posno: string;  insr: string;
-    divcode: string;period:string;
+    club: string; posno: string; insr: string;
+    divcode: string; period: string;
     a1N: string; a1V: string; a2N: string; a2V: string; a3N: string; a3V: string;
     a4N: string; a4V: string; a5N: string; a5V: string; a6N: string; a6V: string;
     a7N: string; a7V: string; a8N: string; a8V: string; a9N: string; a9V: string;
     a10N: string; a10V: string; a11N: string; a11V: string; a12N: string; a12V: string;
     a13N: string; a13V: string; a14N: string; a14V: string; a15N: string; a15V: string;
-    
+
     r1N: string; r1V: string; r2N: string; r2V: string; r3N: string; r3V: string;
     r4N: string; r4V: string; r5N: string; r5V: string; r6N: string; r6V: string;
     r7N: string; r7V: string; r8N: string; r8V: string; r9N: string; r9V: string;
@@ -99,8 +100,8 @@ export class UploadFileComponent implements OnInit {
     r13N: string; r13V: string; r14N: string; r14V: string; r15N: string; r15V: string;
     r16N: string; r16V: string; r17N: string; r17V: string; r18N: string; r18V: string;
     r19N: string; r19V: string; r20N: string; r20V: string;
-c162:string;c163:string;gpfp1:string;gpfp1add:string;netp1:string;
-    gpfp2: string; gpfp2add: string; netp2: string;subdiv:string;
+    c162: string; c163: string; gpfp1: string; gpfp1add: string; netp1: string;
+    gpfp2: string; gpfp2add: string; netp2: string; subdiv: string;emp_type:string;
   } = {
       year: "", month: "", id_card: "", title: "",
       fname: "", lname: "", //doh, position 6 doh not use
@@ -123,9 +124,9 @@ c162:string;c163:string;gpfp1:string;gpfp1add:string;netp1:string;
       c71: "", c72: "", c73: "", c74: "",
       c75: "", c76: "", c77: "", c78: "",
       c79: "", sahaDeps: "", sahaTotl: "", loanOth: "",
-      club: "", posno: "",  insr: "",
-      divcode: "",period:"",
-      a1N:"",a1V:"",
+      club: "", posno: "", insr: "",
+      divcode: "", period: "",
+      a1N: "", a1V: "",
       a2N: "", a2V: "",
       a3N: "", a3V: "",
       a4N: "", a4V: "",
@@ -160,10 +161,10 @@ c162:string;c163:string;gpfp1:string;gpfp1add:string;netp1:string;
       r18N: "", r18V: "",
       r19N: "", r19V: "",
       r20N: "", r20V: "",
-      c162:"",c163:"",
+      c162: "", c163: "",
       gpfp1: "", gpfp1add: "", netp1: "",
       gpfp2: "", gpfp2add: "", netp2: "",
-subdiv:"",
+      subdiv: "",emp_type:"",
     };
   jsonOutputSlipArr: {
     year: string; month: string; id_card: string; title: string;
@@ -188,8 +189,8 @@ subdiv:"",
     c71: string; c72: string; c73: string; c74: string;
     c75: string; c76: string; c77: string; c78: string;
     c79: string; sahaDeps: string; sahaTotl: string; loanOth: string;
-    club: string; posno: string;  insr: string;
-    divcode: string;period:string;
+    club: string; posno: string; insr: string;
+    divcode: string; period: string;
 
     a1N: string; a1V: string; a2N: string; a2V: string; a3N: string; a3V: string;
     a4N: string; a4V: string; a5N: string; a5V: string; a6N: string; a6V: string;
@@ -204,10 +205,10 @@ subdiv:"",
     r13N: string; r13V: string; r14N: string; r14V: string; r15N: string; r15V: string;
     r16N: string; r16V: string; r17N: string; r17V: string; r18N: string; r18V: string;
     r19N: string; r19V: string; r20N: string; r20V: string;
-c162:string;c163:string;
+    c162: string; c163: string;
     gpfp1: string; gpfp1add: string; netp1: string;
     gpfp2: string; gpfp2add: string; netp2: string;
-    subdiv:string;
+    subdiv: string;emp_type:string;
   }[] = [];
 
   jsonOutput: {
@@ -238,6 +239,7 @@ c162:string;c163:string;
   ) { }
   base64: any; //dateNum: String = "";
   fileName: string = ""; yearTax: string = ""; fileSize: string = "";
+  typePerson: string = "";
   //fileGloblal: File | undefined;
   // maxSize=5*1024*1024;
 
@@ -262,6 +264,8 @@ c162:string;c163:string;
       return;
     }
     let fname: string = "";
+    let fname1: string = "";
+    let fname2: string = "";
     this.sizeMaxFile = 5;
     if (this.process == "present") {
       fname = "tax".concat(this.yearTax).concat(".txt");
@@ -272,13 +276,23 @@ c162:string;c163:string;
       delimiter = "|";
     }
     else if (this.process == "slip") {
-      fname = "slip".concat(this.yearTax).concat(this.monthV).concat(".txt");
+      fname1 = "slip".concat(this.yearTax).concat(this.monthV).concat("G").concat(".txt");
+      fname2 = "slip".concat(this.yearTax).concat(this.monthV).concat("E").concat(".txt");
       delimiter = "$";
       this.sizeMaxFile = 15;
+
+      if (!(file.name == fname1 || file.name == fname2)) {
+        //alert("ต้องใช้ชื่อไฟล์:  " + fname);
+        this.display = true; this.msg_err = "ต้องใช้ชื่อไฟล์:  " + fname1 + " หรือ " + fname2;
+        return;
+      }
+      if (this.fileName == fname1) this.typePerson = "G";
+      else if (this.fileName == fname2) this.typePerson = "E";
+
     }
 
 
-    if (!(file.name == fname)) {
+    if (!(file.name == fname) && this.process != "slip") {
       //alert("ต้องใช้ชื่อไฟล์:  " + fname);
       this.display = true; this.msg_err = "ต้องใช้ชื่อไฟล์:  " + fname;
       return;
@@ -350,18 +364,18 @@ c162:string;c163:string;
             "s": dStr, "t": ""
           });
 
-/*
-old format
- this.jsonOutputArr.push({
-            "thb": "",
-            "xx": data[5], "a": data[0], "b": data[1], "c": data[2],
-            "d": data[3], "e": data[4], "f": data[6], "g": data[7], "h": data[8],
-            "i": data[9], "j": data[10], "k": data[11], "l": data[12], "m": data[13],
-            "n": data[14], "o": data[15], "p": data[16], "q": data[17], "r": data[18],
-            "s": dStr, "t": ""
-          });
-
-*/
+          /*
+          old format
+           this.jsonOutputArr.push({
+                      "thb": "",
+                      "xx": data[5], "a": data[0], "b": data[1], "c": data[2],
+                      "d": data[3], "e": data[4], "f": data[6], "g": data[7], "h": data[8],
+                      "i": data[9], "j": data[10], "k": data[11], "l": data[12], "m": data[13],
+                      "n": data[14], "o": data[15], "p": data[16], "q": data[17], "r": data[18],
+                      "s": dStr, "t": ""
+                    });
+          
+          */
         }
         else if (this.process == "retired") {
           run++;
@@ -388,7 +402,7 @@ old format
             "s": data[18], "t": data[19], "xx": run.toString()
           });
         }
-        else if (this.process == "slip") {
+        else if (this.process == "slip" && this.typePerson == "G") {
           // period
           /*
            if (sessionStorage.getItem("dStr") == null) {
@@ -411,7 +425,7 @@ old format
             "c15": (parseFloat(data[21]) / 100).toString(),
             "c16": (parseFloat(data[25]) / 100).toString(),
             "c17": (parseFloat(data[26]) / 100).toString(),
-            
+
             "c18": "0",
             "c19": "0",
             "c20": "0",
@@ -440,14 +454,14 @@ old format
             "c42": (parseFloat(data[87]) / 100).toString(),
             "c43": (parseFloat(data[88]) / 100).toString(),
 
-            "c44": ((parseFloat(data[89]) + parseFloat(data[90])  )    / 100).toString(),
-            
+            "c44": ((parseFloat(data[89]) + parseFloat(data[90])) / 100).toString(),
+
             "c45": "0",
             "c46": "0",
             "c47": (parseFloat(data[162]) / 100).toString(),
             "c48": ((parseFloat(data[91]) + parseFloat(data[92])) / 100).toString(),
             "c49": ((parseFloat(data[93]) + parseFloat(data[94])) / 100).toString(),
-            
+
             "c50": "0",
             "c51": "0",
             "c52": "0",
@@ -476,18 +490,18 @@ old format
             "c73": "0",
             "c74": "",
             "c75": "0",
-            
+
             "c76": (parseFloat(data[159]) / 100).toString(),
             "c77": (parseFloat(data[160]) / 100).toString(),
             "c78": (parseFloat(data[163]) / 100).toString(),
             "c79": data[170],
-            "c162":data[161],
-            "c163":data[162],
+            "c162": data[161],
+            "c163": data[162],
             "gpfp1": (parseFloat(data[164]) / 100).toString(),
-            "gpfp1add": (parseFloat(data[165]) / 100).toString() , 
-            "netp1": (parseFloat(data[166]) / 100).toString() ,
+            "gpfp1add": (parseFloat(data[165]) / 100).toString(),
+            "netp1": (parseFloat(data[166]) / 100).toString(),
             "gpfp2": (parseFloat(data[167]) / 100).toString(),
-            "gpfp2add": (parseFloat(data[168]) / 100).toString() ,
+            "gpfp2add": (parseFloat(data[168]) / 100).toString(),
             "netp2": (parseFloat(data[169]) / 100).toString(),
 
             "sahaDeps": "", "sahaTotl": "", "loanOth": "",
@@ -524,7 +538,7 @@ old format
             "a15N": data[84],
             "a15V": ((parseFloat(data[85]) + parseFloat(data[86])) / 100).toString(),
             "r1N": data[100],
-            "r1V": (parseFloat(data[101])  / 100).toString(),
+            "r1V": (parseFloat(data[101]) / 100).toString(),
             "r2N": data[103],
             "r2V": (parseFloat(data[104]) / 100).toString(),
             "r3N": data[106],
@@ -557,20 +571,193 @@ old format
             "r16V": (parseFloat(data[146]) / 100).toString(),
             "r17N": data[148],
             "r17V": (parseFloat(data[149]) / 100).toString(),
-            "r18N":  data[151],
+            "r18N": data[151],
             "r18V": (parseFloat(data[152]) / 100).toString(),
             "r19N": data[154],
             "r19V": (parseFloat(data[155]) / 100).toString(),
             "r20N": data[157],
             "r20V": (parseFloat(data[158]) / 100).toString(),
-            "subdiv":data[9],
+            "subdiv": data[9],
+            "emp_type": this.typePerson,
+          });
+
+
+
+
+        } //G
+        else if (this.process == "slip" && this.typePerson == "E") { //E old format 1 period
+          this.jsonOutputSlipArr.push({
+            "year": data[0], "month": data[1], "id_card": data[2],
+            "title": data[3], "fname": data[4], "lname": data[5], "divname": data[7],
+            "bankcode": data[8],
+            "bankname": data[9], "brchcode": data[10], "brchname": data[11], "bank_acc": data[12],
+
+            "c14": (parseFloat(data[13]) / 100).toString(),
+            "c15": (parseFloat(data[14]) / 100).toString(),
+            "c16": (parseFloat(data[15]) / 100).toString(),
+            "c17": (parseFloat(data[16]) / 100).toString(),
+
+            "c18": (parseFloat(data[17]) / 100).toString(),
+            "c19": (parseFloat(data[18]) / 100).toString(), 
+            "c20": (parseFloat(data[19]) / 100).toString(),
+            "c21": (parseFloat(data[20]) / 100).toString(),
+            "c22": (parseFloat(data[21]) / 100).toString(),
+            "c23": (parseFloat(data[22]) / 100).toString(),
+            "c24": (parseFloat(data[23]) / 100).toString(),
+            "c25": (parseFloat(data[24]) / 100).toString(),
+            "c26": (parseFloat(data[25]) / 100).toString(),
+            "c27": (parseFloat(data[26]) / 100).toString(),
+            "c28": (parseFloat(data[27]) / 100).toString(),
+            "c29": (parseFloat(data[28]) / 100).toString(),
+            "c30": (parseFloat(data[29]) / 100).toString(),
+            "c31": (parseFloat(data[30]) / 100).toString(),
+            "c32": (parseFloat(data[31]) / 100).toString(),
+            "c33": (parseFloat(data[32]) / 100).toString(),
+
+            "c34": data[33],
+            "c35": (parseFloat(data[34]) / 100).toString(),
+            "c36": data[35],
+            "c37": (parseFloat(data[36]) / 100).toString() ,
+            "c38": data[37],
+            "c39": (parseFloat(data[38]) / 100).toString(), 
+            "c40": data[39],
+            "c41": (parseFloat(data[40]) / 100).toString(),
+            "c42": (parseFloat(data[41]) / 100).toString(),
+            "c43": (parseFloat(data[42]) / 100).toString(),
+
+            "c44": ((parseFloat(data[43])) / 100).toString(),
+
+            "c45": (parseFloat(data[44]) / 100).toString(),
+            "c46": (parseFloat(data[45]) / 100).toString(),
+            "c47": (parseFloat(data[46]) / 100).toString(),
+            "c48": ((parseFloat(data[47])) / 100).toString(),
+            "c49": (( parseFloat(data[48])) / 100).toString(),
+
+            "c50": (parseFloat(data[49]) / 100).toString(),
+            "c51": (parseFloat(data[50]) / 100).toString(),
+            "c52": (parseFloat(data[51]) / 100).toString(),
+            "c53": (parseFloat(data[52]) / 100).toString(),
+            "c54": (parseFloat(data[53]) / 100).toString(),
+            "c55": (parseFloat(data[54]) / 100).toString(),
+            "c56": (parseFloat(data[55]) / 100).toString(),
+            "c57": (parseFloat(data[56]) / 100).toString(),
+            "c58": (parseFloat(data[57]) / 100).toString(),
+            "c59": (parseFloat(data[58]) / 100).toString(),
+
+            "c60": data[59],
+            "c61": (parseFloat(data[60]) / 100).toString(),
+            "c62": data[61],
+            "c63": (parseFloat(data[62]) / 100).toString(),
+            "c64": data[63],
+            "c65": (parseFloat(data[64]) / 100).toString(),
+            "c66": data[65],
+            "c67": (parseFloat(data[66]) / 100).toString(),
+
+            "c68": data[67],
+            "c69": (parseFloat(data[68]) / 100).toString(),
+            "c70": data[69],
+            "c71": (parseFloat(data[70]) / 100).toString(),
+            "c72": data[71],
+            "c73": (parseFloat(data[72]) / 100).toString(),
+            "c74": data[73],
+            "c75": (parseFloat(data[74]) / 100).toString(),
+
+            "c76": (parseFloat(data[75]) / 100).toString(),
+            "c77": (parseFloat(data[76]) / 100).toString(),
+            "c78": (parseFloat(data[77]) / 100).toString(),
+            "c79": data[78],
+
+            "c162": "",
+            "c163": "",
+
+            "gpfp1": "0",
+            "gpfp1add":"0",
+            "netp1": "0",
+            "gpfp2": "0",
+            "gpfp2add":"0",
+            "netp2": "0",
+
+            "sahaDeps": "", "sahaTotl": "", "loanOth": "",
+            "club": "", "posno": "", "insr": "",
+            "divcode": "", "period": "2",
+            "a1N": "",
+            "a1V": "0",
+            "a2N": "",
+            "a2V": "0",
+            "a3N": "",
+            "a3V": "0",
+            "a4N": "",
+            "a4V": "0",
+            "a5N": "",
+            "a5V": "0",
+            "a6N": "",
+            "a6V": "0",
+            "a7N": "",
+            "a7V": "0",
+            "a8N": "",
+            "a8V": "0",
+            "a9N": "",
+            "a9V": "0",
+            "a10N": "",
+            "a10V": "0",
+            "a11N": "",
+            "a11V": "0",
+            "a12N": "",
+            "a12V": "0",
+            "a13N": "",
+            "a13V": "0",
+            "a14N": "",
+            "a14V": "0",
+            "a15N": "",
+            "a15V": "0",
+            "r1N": "",
+            "r1V": "0",
+            "r2N": "",
+            "r2V": "0",
+            "r3N": "",
+            "r3V": "0",
+            "r4N": "",
+            "r4V": "0",
+            "r5N": "",
+            "r5V": "0",
+            "r6N": "",
+            "r6V": "0",
+            "r7N": "",
+            "r7V": "0",
+            "r8N": "",
+            "r8V": "0",
+            "r9N": "",
+            "r9V": "0",
+            "r10N": "",
+            "r10V": "0",
+            "r11N": "",
+            "r11V": "0",
+            "r12N": "",
+            "r12V": "0",
+            "r13N": "",
+            "r13V": "0",
+            "r14N": "",
+            "r14V": "0",
+            "r15N": "",
+            "r15V": "0",
+            "r16N": "",
+            "r16V": "0",
+            "r17N": "",
+            "r17V": "0",
+            "r18N": "",
+            "r18V": "0",
+            "r19N": "",
+            "r19V": "0",
+            "r20N": "",
+            "r20V": "0",
+            "subdiv": "",
+            "emp_type":this.typePerson,
           });
 
 
 
 
         }
-
 
 
         // break;
@@ -729,13 +916,13 @@ old format
 
     }
     if (!this.disableDelete) {
-      let url = this.ytSv.url + "/delYTslip/" + this.yearTax + "/" + this.monthV+"/"+this.period;//+"?file="+this.fileGloblal;
+      let url = this.ytSv.url + "/delYTslip/" + this.yearTax + "/" + this.monthV + "/" + this.period+"/"+this.typePerson;//+"?file="+this.fileGloblal;
       // console.log(body);
       try {
         await lastValueFrom(this.http.delete(url, header)).
           then(response => {
 
-            this.display = false; 
+            this.display = false;
             this.msg_err = "ลบข้อมูลเสร็จแล้ว....";
             this.disableDelete = true;
             this.disableInsert = false;
@@ -795,7 +982,7 @@ old format
 
       this.disableInsert = true;
       this.disableDelete = true;
-      this.display = false; 
+      this.display = false;
       this.msg_err = "เพิ่มข้อมูลจากไฟล์ข้อความเสร็จแล้ว....";
       alert(this.msg_err);
       return;

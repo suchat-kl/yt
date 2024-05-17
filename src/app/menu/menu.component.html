@@ -5,25 +5,37 @@
     
       <div [hidden]="passLogin">
         <div class="row" style="background-color: rgb(221, 226, 238);">
-          <div class="col-12 col-sm-4 mr-2 mt-4 mb-1 ">
-            <span class="p-float-label">
+          
+          <div class="col-12 col-sm-4  mr-1 mb-1  ">
+            <!-- <span class="p-float-label"> -->
               <!-- [(ngModel)]="userName" -->
-              <input id="userName" name="userName" type="text" pInputText ngModel required minlength="3"
+              <input placeholder="ชื่อผู้ใช้งาน" id="userName" name="userName" type="text" pInputText ngModel required minlength="3"
                 style="width:8rem ;" #userName="ngModel">
-              <label for="username">ชื่อผู้ใช้งาน</label>
-            </span>
+              <!-- <label for="username">ชื่อผู้ใช้งาน</label> -->
+            <!-- </span> -->
           </div>
-          <div class="col-12 col-sm-4 mr-1 mt-4 mb-1">
+          <div class="col-12 col-sm-4 mr-1 mb-1 ">
+          
             <p-password  placeholder="รหัสผ่าน" id="password" name="password" #password="ngModel" [toggleMask]="true"
               ngModel required minlength="6">
             </p-password>
 
           </div>
-          <div class="col-12 col-sm-4 mt-4 mb-1">
-            <button pButton pRipple type="submit" label="เข้าระบบ" [disabled]="!userForm.form.valid"
-              class="p-button-rounded"><i class="fa fa-sign-in" aria-hidden="true"></i>
+          <div class="col-12 col-sm-4  mr-1 mb-1 ">
+  
+            <button pButton pRipple type="submit" label="เข้าระบบ"  [disabled]="!userForm.form.valid"
+              class="p-button-rounded   "   >
+              <i class="fa fa-sign-in" aria-hidden="true"></i>
             </button>
+  
           </div>
+          <div class="col-12 col-sm-2   mr-1 mb-1 ">
+            <!-- <button pButton pRipple type="submit" label="thaID" (click)="onThaidClick()" class="p-button-rounded"><i
+                aria-hidden="true"></i>
+            </button> -->
+            
+          </div>
+          <!-- mt-3 mr-1 mb-1 -->
           <div *ngIf="userName.errors && (userName.dirty || userName.touched)" class="alert alert-danger">
             <div [hidden]="!userName.errors['required']">
 
@@ -92,7 +104,13 @@
               <div class="p-ml-3"> จำนวนผู้ลงทะเบียน: {{cntRegis}}</div>
               &nbsp;&nbsp;&nbsp;&nbsp;
           <div> <a target="_blank" class="p-ml-3"  href="https://kkumail-my.sharepoint.com/:b:/p/suchat_kl/EQ5OPSG03_tKvNflOhTiFZ8B6765KK9cEWOGQCtWX-emgQ">คู่มือการใช้งาน</a> </div>
-      </ng-template>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <!-- _blank -->
+      <div><h1> <a target="_self" class="p-ml-3"
+          href="{{thaidUrl}}">เข้าระบบด้วย :<img src="./assets/images/thaid.png" width="100" /></a></h1></div>
+     
+        </ng-template>
   </p-messages>
+  <!-- <div [innerHTML]="displayHTML"></div> -->
   </form>
 </div>

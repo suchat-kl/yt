@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Title } from "@angular/platform-browser";
+import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 //import { ActivatedRoute,RouterModule, Routes } from '@angular/router';
 @Injectable({
   providedIn: 'root'
@@ -11,6 +14,10 @@ export class YtServiceService {
   private _url = 'https://dbdoh.doh.go.th:9000'; //develop dbdoh production backupdoh
   public get url() {
     return this._url;
+  }
+  private _redirect_url = "https://dbdoh.doh.go.th/yt";
+  public get redirect_url(){
+    return this._redirect_url;
   }
   // public set url(value) {
   //   this._url = value;
@@ -81,5 +88,5 @@ export class YtServiceService {
     //   console.log(this.title); // price
     this.titleService.setTitle(title);
   }
-
+  
 }

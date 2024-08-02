@@ -6,7 +6,8 @@ import { LoginApi } from '../login-api';
 import { LoginThaID } from '../login-thaid';
 import { UserDetail } from '../user-detail';
 // import {Title} from "@angular/platform-browser";
-import { YtServiceService } from '../yt-service.service'
+import { YtServiceService } from '../yt-service.service';
+import { DialogModule } from 'primeng/dialog';
 interface ReturnType {
   id: string,
   done: boolean
@@ -23,7 +24,7 @@ export class IndexComponent implements OnInit {
   // title:string="";
   // private titleService:Title
   accessToken: string = "";
-
+  visible: boolean = false;
   
   constructor(
     private routeParam: ActivatedRoute, 
@@ -35,7 +36,7 @@ export class IndexComponent implements OnInit {
        private ytSv: YtServiceService 
 ) {
     
-    
+    this.visible=false;
   }
   // token:string="";
   // doc:string="";
@@ -51,7 +52,7 @@ export class IndexComponent implements OnInit {
         // this.title = params.title;
         // console.log(this.title); // price
         //this.titleService.setTitle(this.title);
-
+        // alert(params['title']);
         if (params['title'] == null) {
           this.ytSv.setTitle("ดาวน์โหลดเอกสารภาษีประจำปี");
         }
@@ -60,10 +61,12 @@ export class IndexComponent implements OnInit {
         // alert(params['code']);
         if (params['error'] != null) {
          this.msg= "ผู้ใช้งานไม่ยอมรับการให้ข้อมูล";
-
-          alert(this.msg);
+         
+          this.visible = true;
+          // alert(this.msg);
         }
        else if (params['code'] != null) {
+          this.visible = false;
           this.accessToken = params['code'];
           await this.loginBythID();
         }
@@ -93,7 +96,7 @@ async validIdcard(idcard:string):Promise<void>{
 
   }
   // let url ="https://imauth.bora.dopa.go.th/api/v2/oauth2/token/";
-  let url = "https://dbdoh.doh.go.th:9000/isValidIdcard/" + idcard;
+  let url = this.ytSv.url+  "/isValidIdcard/" + idcard;
  
   let body = new URLSearchParams();
   // body.set("grant_type", "authorization_code");
@@ -136,25 +139,31 @@ async validIdcard(idcard:string):Promise<void>{
   async loginBythID(): Promise<void> {
     let header = {
       headers: new HttpHeaders()
-        .set('Authorization', "Basic Ym5WelEySjFOWFV3WW5WM05tcHdkV1JEY0dsd1lXZFhhM0I0ZW1WNGFIbzpkbGQ2YmtsMWVuTTBPVXN3YW10UGNuTTRWelJTWVhoQmJXOVJhVE00U0hGa2MyRnlUMG80Tnc=")
-        .set('Content-Type', 'application/x-www-form-urlencoded')
+        // .set('Authorization', "Basic Ym5WelEySjFOWFV3WW5WM05tcHdkV1JEY0dsd1lXZFhhM0I0ZW1WNGFIbzpkbGQ2YmtsMWVuTTBPVXN3YW10UGNuTTRWelJTWVhoQmJXOVJhVE00U0hGa2MyRnlUMG80Tnc=")
+        // .set('Content-Type', 'application/x-www-form-urlencoded')
       // .set('Accept', 'application/json')   
-      .set('Access-Control-Allow-Origin', '*' )
+      // .set('Access-Control-Allow-Origin', '*' )
       // .set('Access-Control-Allow-Credentials', 'true')     
-      .set("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
-      .set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+      // .set("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
+      // .set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
 
 
     }
     // let url ="https://imauth.bora.dopa.go.th/api/v2/oauth2/token/";
-      let url = 'https://corsproxy.io/?' +
-      encodeURIComponent(
-        "https://imauth.bora.dopa.go.th/api/v2/oauth2/token/");
-
+      // let url = 'https://corsproxy.io/?' +
+      // encodeURIComponent(
+      //   "https://imauth.bora.dopa.go.th/api/v2/oauth2/token/");
+    // let url = 'http://proxy:root3533@backupdoh.doh.go.th:9000/?' +
+    //   encodeURIComponent(
+    //     "https://imauth.bora.dopa.go.th/api/v2/oauth2/token/");
+    let url = "https://dbdoh.doh.go.th:9000/getIdthaID?code=" +
+      this.accessToken +
+      "&redirect_uri=" +
+      this.ytSv.redirect_url;
     let body=new URLSearchParams();
-    body.set("grant_type","authorization_code");
-    body.set("code",this.accessToken );
-    body.set("redirect_uri",this.ytSv.redirect_url);//""+sessionStorage.getItem("redirect_uri")?.toString()
+    // body.set("grant_type","authorization_code");
+    // body.set("code",this.accessToken );
+    // body.set("redirect_uri",this.ytSv.redirect_url);//""+sessionStorage.getItem("redirect_uri")?.toString()
   // console.log(this.accessToken);
   // console.log(body);
  this.http.post(url,body,header).subscribe(async (response:any)=>{
@@ -165,9 +174,14 @@ async validIdcard(idcard:string):Promise<void>{
    
    
    if (!this.userDoh ) {
-    let msg:string = "ระบบงานนี้ใช้สำหรับข้าราชการลูกจ้างประจำกรมทางหลวง";
-    alert(msg);
+    this.msg = "ระบบงานนี้ใช้สำหรับข้าราชการลูกจ้างประจำกรมทางหลวง";
+     this.visible = true;
+    // alert(msg);
 return;
+   }
+   else {
+    await this.logIn();
+ 
    }
    
   // let j = JSON.stringify(response);
@@ -175,7 +189,6 @@ return;
   //  let obj2: LoginThaID = JSON.parse(j);
   //  alert(obj2.pid);
  });
- await this.logIn();
  
  
   
@@ -194,14 +207,15 @@ return;
     try {//this.loginJson
       // await this.http.post(this.url, this.loginJson).toPromise().
       await firstValueFrom(this.http.post(this.url, this.loginJson)).
-        then(response => {
+        then(async response => {
           let j = JSON.stringify(response);
           let obj2: LoginApi = JSON.parse(j);
           sessionStorage.setItem("token", obj2.accessToken);
           sessionStorage.setItem('passLogin', 'true');
           // console.log(this.url);
           // console.log(this.loginJson);
-
+          let lastLoginMsg = await this.ytSv.getLastLogin(); 
+          this.ytSv.insertLastLogin("yt@thaid"); //not need to use await
 
         });
 

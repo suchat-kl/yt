@@ -1,7 +1,7 @@
 // import { AppRoutingModule } from '../app-routing.module';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-
+import { DatePipe } from '@angular/common';
 import { UsrpwdForm } from '../usrpwd-form';
 import { HttpClient } from '@angular/common/http';
 import { LoginApi } from '../login-api';
@@ -13,6 +13,7 @@ import { UserService } from '../user.service';
 import { YtServiceService } from '../yt-service.service';
 import { firstValueFrom } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+
 
 
 
@@ -37,72 +38,63 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class MenuComponent {
   // thaid:boolean=false;
-  thaidUrl:string="";
-displayHTML: any;
-// onThaidClick() {
-// this.thaid=true;
-// }
+  thaidUrl: string = "";
+  displayHTML: any;
+  // onThaidClick() {
+  // this.thaid=true;
+  // }
   // title = 'ดาวน์โหลดเอกสารภาษีประจำปี';
   // userName:any;
   // password="" ;
-  cntRegis: number = 0;
+  cntRegis?: string = "0";
+  // thaidCnt?:string="0";
   _url: string = "";
+  lastLoginMsg?: string = "";
+  msg:string="";
 
   // has2Period: boolean = false;
   getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
   async cntUsr() {
-    this._url = this.ytSv.url + '/cntRigister';
+    // await this.getLastLogin();
+    // this.ytSv.getLastLogin();
+    // let l= sessionStorage.getItem("thaid");
+    // alert(l);
+    // this.thaidCnt = l?.toString();
+    // alert("thaid:"+this.thaidCnt);
+    this._url = this.ytSv.url + '/cntRigisterStr';
     try {//this.loginJson
       await firstValueFrom(this.http.get(this._url)).
         then(response => {
           let j = JSON.stringify(response);
-
+         let d= JSON.parse(j);
           // sessionStorage.setItem("cntUsr", j);
-          this.cntRegis = parseInt(j);
-
+          this.cntRegis = d.thaid+"/"+d.total;//
+          // alert(j);
+          sessionStorage.setItem("cnt", this.cntRegis.toString());
+          // alert("cnt"+this.cntRegis);
         });
 
     }
     catch (err) { }
   }
   chk: any;
-  state:Number=0;
+  state: Number = 0;
   // redirect_uri: string ="http://localhost:4200/yt";
-  ngOnInit() {
-    //  this.chk=sessionStorage.getItem("cntUsr")+"";
-    if (this.cntRegis == 0) { this.cntUsr(); }
-    this.showMenu();
-    this.state=this.getRandomInt(1,100);
-    this.thaidUrl = "https://imauth.bora.dopa.go.th/api/v2/oauth2/auth/?response_type=code&client_id=bnVzQ2J1NXUwYnV3NmpwdWRDcGlwYWdXa3B4emV4aHo&redirect_uri=" + this.ytSv.redirect_url +"&scope=pid&state="+this.state;
-    // this._url = this.ytSv.url + '/cntRigister';
-    // this.http.get(this._url)
-    //   .subscribe(response => {
-    //     //console.log(JSON.stringify(response));
-    //     let j = JSON.stringify(response);
-    //     // console.log(j);
-    //     sessionStorage.setItem("cntUsr", j);
-    //   });
+  async ngOnInit() {
+    if (sessionStorage.getItem('idcard') == null) {
+      sessionStorage.setItem('idcard', '');
+    }
+    if (sessionStorage.getItem('cnt') == null) {
+      sessionStorage.setItem('cnt', '0');
+    }
 
-  }
-  display: boolean = false;
-  data: any;
-  url: string = this.ytSv.url + '/login';
-  urlThaid:string="";
-  loginJson = {
+    if (sessionStorage.getItem('last') == null) {
+      sessionStorage.setItem('last', '');
+    }
 
-    "username": "",
-    "password": ""
-
-  }
-  // response!: LoginApi;
-  constructor(private http: HttpClient, private route: Router, private usr: UserService
-    , private ytSv: YtServiceService, private sanitizer: DomSanitizer) {
-    // if (sessionStorage.getItem('redirect_uri') == null) {
-    //   sessionStorage.setItem('redirect_uri', this.redirect_uri);
-    // }
-      if (sessionStorage.getItem('userName') == null) {
+    if (sessionStorage.getItem('userName') == null) {
       sessionStorage.setItem('userName', '');
     }
     if (sessionStorage.getItem('passLogin') == null) {
@@ -117,12 +109,65 @@ displayHTML: any;
     if (sessionStorage.getItem("mnuChangePwd") == null) {
       sessionStorage.setItem("mnuChangePwd", "true");
     }
+    //  this.chk=sessionStorage.getItem("cntUsr")+"";
+    if (sessionStorage.getItem("cnt") == "0") { await this.cntUsr(); }
+    else {
+      let x = sessionStorage.getItem("cnt") == null ? "0" : sessionStorage.getItem("cnt");
+      this.cntRegis = x?.toString();
+    }
+    if (sessionStorage.getItem("last") == "" ) { }
+    else {
+      let x = sessionStorage.getItem("last") == null ? "" : sessionStorage.getItem("last");
+      this.lastLoginMsg = x?.toString();
+    }
+    this.showMenu();
+    this.state = this.getRandomInt(1, 100);
+    this.thaidUrl = "https://imauth.bora.dopa.go.th/api/v2/oauth2/auth/?response_type=code&client_id=bnVzQ2J1NXUwYnV3NmpwdWRDcGlwYWdXa3B4emV4aHo&redirect_uri=" + this.ytSv.redirect_url + "&scope=pid&state=" + this.state;
+    // this._url = this.ytSv.url + '/cntRigister';
+    // this.http.get(this._url)
+    //   .subscribe(response => {
+    //     //console.log(JSON.stringify(response));
+    //     let j = JSON.stringify(response);
+    //     // console.log(j);
+    //     sessionStorage.setItem("cntUsr", j);
+    //   });
+
+  }
+  display: boolean = false;
+  data: any;
+  url: string = this.ytSv.url + '/login';
+  urlThaid: string = "";
+  loginJson = {
+
+    "username": "",
+    "password": ""
+
+  }
+  // response!: LoginApi;
+  //private datePipe: DatePipe,
+  constructor(private http: HttpClient, private route: Router, private usr: UserService
+    , private ytSv: YtServiceService, private sanitizer: DomSanitizer) {
+    // if (sessionStorage.getItem('redirect_uri') == null) {
+    //   sessionStorage.setItem('redirect_uri', this.redirect_uri);
+    // }
+
     // if (sessionStorage.getItem("mnuResetPwd") == null) {
     //   sessionStorage.setItem("mnuResetPwd", "true");
     // }
+    //this.cntRegis == 0
+
+    // if (sessionStorage.getItem("cnt") == "0") {  this.cntUsr(); }
+    // else {
+    //   let x = sessionStorage.getItem("cnt") == null ? "0" : sessionStorage.getItem("cnt");
+    //   this.cntRegis = x?.toString();
+    // }
+    // this.showMenu();
+    // alert(ytSv.url);
+    // alert("xxxxxx");
   }
 
   logOut() {
+    // this.ytSv.loginBy="";
     this.passLogin = false;
     // alert(sessionStorage.getItem('has2Period'));
     //sessionStorage.removeItem("cntUsr");
@@ -134,13 +179,17 @@ displayHTML: any;
     sessionStorage.removeItem("mnuChangePwd");
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("id");
+    sessionStorage.removeItem("idcard");
     sessionStorage.removeItem("has2Period");
     sessionStorage.removeItem("year");
-    this.showMenu();
+    sessionStorage.removeItem("cnt");
+    sessionStorage.removeItem("last");
+// sessionStorage.removeItem('thaid');
     this.route.navigate(['/register']);
     this.route.navigate(['']);
     this.usr.userName = "";
-    this.cntUsr();
+    // this.cntUsr();
+    this.showMenu();
   }
   onclick(value: any): void {
     // if (this.thaid){
@@ -149,10 +198,10 @@ displayHTML: any;
     //   this.http.get("urlThaid", { responseType: "text" }).subscribe(response => {
     //     this.displayHTML = this.sanitizer.bypassSecurityTrustHtml(response);
     //   })
-       
+
     //    return;
     // }
-   
+
 
 
     if (this.passLogin) {
@@ -180,7 +229,21 @@ displayHTML: any;
     // console.log(obj.password);
     this.loginJson["username"] = obj.userName;
     this.loginJson["password"] = obj.password;
-    this.cntUsr();
+    // this.cntUsr();
+/*
+    if (this.ytSv.loginBy==""){}
+else {
+  
+  switch (this.ytSv.loginBy){
+    case "userNamePwd": this.msg ="มีการเข้าระบบด้วยการใช้ชื่อและรหัสผ่านแล้ว";break;
+    case "thaID": this.msg ="มีการเข้าระบบด้วยการใช้แอปThaIDแล้ว";break;
+    default:
+  }
+  alert(this.msg);
+  return;
+}
+*/
+
     this.logIn();
 
   }
@@ -202,7 +265,7 @@ displayHTML: any;
           sessionStorage.setItem('passLogin', 'true');
           // console.log(this.url);
           // console.log(this.loginJson);
-
+// this.ytSv.loginBy="userNamePwd";
 
         });
 
@@ -254,7 +317,7 @@ displayHTML: any;
     // this.http.get(this.url, header)
     //   .subscribe(response => {
     await firstValueFrom(this.http.get(this.url, header)).
-      then(response => {
+      then(async response => {
         //console.log(JSON.stringify(response));
         let j = JSON.stringify(response);
         //console.log(j);
@@ -264,6 +327,11 @@ displayHTML: any;
         sessionStorage.setItem('userName', obj2.username);
         sessionStorage.setItem('id', (obj2.id).toString());
         sessionStorage.setItem('idcard', obj2.idcard);
+       this.lastLoginMsg= await this.ytSv.getLastLogin(); 
+        this.ytSv.insertLastLogin("yt"); //not need to use await
+        // await this.getLastLogin();
+        // alert(this.lastLoginMsg);
+        // this.showMenu();
         // console.log(obj2.username);
         // this.usr.userName=obj2[0].username;
         // console.log(this.usr.userName);
@@ -340,7 +408,12 @@ displayHTML: any;
       });
     //chk2Period
 
+
+    // alert(this.lastLoginMsg);
   } //login
+ 
+  
+
 
   // mnuStatus={"mnuUploadFile":true,"mnuDownloadFile":true};
   items: MenuItem[] = [];

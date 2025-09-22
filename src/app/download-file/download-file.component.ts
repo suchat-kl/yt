@@ -306,6 +306,9 @@ export class DownloadFileComponent implements OnInit {
   }//on click
   constructor(private routeA: ActivatedRoute, private ytSv: YtServiceService,
     private route: Router, private http: HttpClient) {
+    if (this.pwdType == null) {
+      this.pwdType = "idcard";
+    }
     // if (sessionStorage.getItem('has2Period') === 'true')
     //   this.has2Period = true;
     // else
@@ -319,6 +322,9 @@ export class DownloadFileComponent implements OnInit {
   //     this.yearTax = (new Date().getFullYear() + 543).toString();
   // }
   ngOnInit(): void {
+    if (this.pwdType==null){
+      this.pwdType="idcard";
+    }
     if (!(sessionStorage.getItem("passLogin") === 'true')) {
       this.route.navigate(['']);
       return;

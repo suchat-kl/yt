@@ -1,9 +1,11 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-
+declare const process: any;
 export const environment = {
-  production: false
+  production: false,
+  usr: "gdbf-7ho9yh'vp^jfy[wx",// process.env['USR_SLIP'] || '',
+  pwd: "fingerPrint@Doh",//process.env['PWD_SLIP'] || '',
 };
 
 /*

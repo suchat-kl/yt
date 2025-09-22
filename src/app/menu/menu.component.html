@@ -1,3 +1,4 @@
+<div appDisableRightClick appDisableFunctionKeys>
 <div class="container-fluid">
   <form #userForm="ngForm" (ngSubmit)="onclick(userForm.value)">
     <p-menubar [model]="items">
@@ -96,24 +97,51 @@
         <p-button icon="pi pi-check" (click)="display=false" label="ตกลง" styleClass="p-button-text"></p-button>
       </ng-template>
     </p-dialog>
+
+<p-dialog header="แจ้งเพื่อทราบ(4 กย 68)" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [(visible)]="onedisplay" position="top">
+
+
+  <p style="color: rgb(247, 7, 7);"> <i class="pi pi-spin pi-spinner" style="font-size: 3rem"></i> เพื่อป้องกันปัญหา รหัสผ่านรั่วไหลให้ทุกท่านทำการเปลี่ยนชื่อผู้ใช้งานและรหัสผ่าน ที่เมนูผู้ใช้งาน เพื่อความปลอดภัยของข้อมูลของท่านเอง </p>
+  <ng-template pTemplate="footer">
+    <!-- <p-button icon="pi pi-check" (click)="onedisplay_click()" label="ตกลง" styleClass="p-button-text"></p-button> -->
+  </ng-template>
+</p-dialog>
+
+
+
     <p-messages severity="info">
       <ng-template pTemplate>
           
               <img src="./assets/images/doh.jpg" width="32" />
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <div class="p-ml-3"> ใช้งานครั้งล่าสุดเมื่อ: </div><div>{{lastLoginMsg}}</div>
+              <div class="p-ml-3"> ใช้งานล่าสุด: </div><div>{{lastLoginMsg}}</div>
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <div class="p-ml-3"> จำนวนผู้ใช้thaID/ลงทะเบียน :  {{cntRegis}}</div>
+              <!-- <div class="p-ml-3"> จำนวนผู้ใช้thaID/ลงทะเบียน :  {{cntRegis}}</div> -->
               &nbsp;&nbsp;&nbsp;&nbsp;
-          <div> <a target="_blank" class="p-ml-3"  href="https://kkumail-my.sharepoint.com/:b:/p/suchat_kl/EQ5OPSG03_tKvNflOhTiFZ8B6765KK9cEWOGQCtWX-emgQ">คู่มือการใช้งาน</a> </div>
+              <div class="p-ml-3"> จำนวนดาวน์โหลดรายงาน : {{viewRep}}  ครั้ง (เริ่ม มี.ค. 68)</div>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+          <div> <a target="_blank" class="p-ml-3"  href="https://kkumail-my.sharepoint.com/:b:/p/suchat_kl/EQ5OPSG03_tKvNflOhTiFZ8B6765KK9cEWOGQCtWX-emgQ">คู่มือ</a> </div>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <!-- _blank -->
     <div [hidden]="passLogin">
-      <div><h1> <a target="_self" class="p-ml-3"
-          href="{{thaidUrl}}">เข้าระบบด้วย :<img src="./assets/images/thaid.png" width="100" /></a></h1></div>
+      <div> <a target="_self" class="p-ml-3"
+          href="{{thaidUrl}}"><img src="./assets/images/thaid.png" width="100" alt="เข้าระบบด้วยแอป ThaID" /></a></div>
+      
+          
     </div>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<!-- <div [hidden]="passLogin">
+<div> <a target="_blank" class="p-ml-3" href="{{oneLoginUrl}}"><img alt="เข้าระบบด้วยแอป OneLogin" src="./assets/images/oneLogin.png"
+      width="100" /></a></div>
+</div> -->
         </ng-template>
   </p-messages>
   <!-- <div [innerHTML]="displayHTML"></div> -->
+
+  <!-- <p-dialog header="ระบบใบรับรองภาษี สลิปรายบุคคล menu" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <span class="p-text-secondary block mb-5"> {{msg}}</span>
+  </p-dialog> -->
   </form>
+</div>
 </div>

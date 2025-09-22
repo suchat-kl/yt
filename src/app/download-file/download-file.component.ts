@@ -76,14 +76,24 @@ export class DownloadFileComponent implements OnInit {
   titleMonth: string = "เลือกเดือน";
   hidePeriod: boolean = true;
   repType: string = "tax";
+  pwdType: string ="idcard"/// "none";
   period: string = "2";
   yearTax: string = "";
+  pwdTax:string="";
   monthV: string = "00";
+  // urlPdf:string="";
   // selectedMonth: MonthType = { name: "มีนาคม", month: "03" };
   display: boolean = false; msg_err: string = "";
   // has2Period: boolean = false;
   // titleYear: string = "ปี พ.ศ. ภาษี";
   //e: any
+  changePwdType(e: any) {
+    this.pwdType = e.target.value;
+    // alert(this.pwdType);
+    // if (this.pwdType == "custom") {
+    // }
+   
+  }
   changeSelect(e: any) {
     // alert(e.value);
     // alert(e.target.value);
@@ -124,6 +134,16 @@ export class DownloadFileComponent implements OnInit {
     this.chkPeriod();
     // this.isDisabledPeriod();
     
+    // else {
+    //   this.hidePeriod = true;
+    // }
+
+  }
+  changePwdTax(e: any) {
+    this.pwdTax = e.target.value;
+    // this.chkPeriod();
+    // this.isDisabledPeriod();
+
     // else {
     //   this.hidePeriod = true;
     // }
@@ -190,7 +210,18 @@ export class DownloadFileComponent implements OnInit {
   async onclick(value: any) {//sessionStorage.getItem("id")
     let body = { "id": sessionStorage.getItem("idcard") };
     this.monthV = this.monthV.trim();
-    let tmpMonth = this.monthV;
+    // let encryptMap = new Map<string, string>();
+    let pwd: string = "";//let idN= sessionStorage.getItem("idcard");
+     switch (this.pwdType){
+      case 'none':pwd="";break;
+       case 'idcard': pwd = ""; break; //pwd = idN==null?"":idN;break;
+       case 'birthdate': pwd = ""; break;// pwd = idN == null ? "" : idN;break;
+       case 'custom':pwd=this.pwdTax;break;
+     } 
+    
+    // encryptMap.set("name",this.pwdType);
+    // encryptMap.set("val",pwd);
+    // let tmpMonth = this.monthV;
     // this.monthV=this.selectedMonth.month;
     // console.log(this.monthV);
     // (sessionStorage.getItem('has2Period') === 'true')
@@ -223,7 +254,7 @@ export class DownloadFileComponent implements OnInit {
 
     // this.monthV = this.m.nativeElement.value;
     // this.monthV = this.monthV.split(",")[1];
-    let url = this.ytSv.url + "/repYT/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV + "&period=" + this.period;
+    let url = this.ytSv.url + "/repYT/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV + "&period=" + this.period+"&pwdType="+this.pwdType+"&pwd="+pwd;
     // alert(this.monthV);
     // alert(url);
     // return;
@@ -251,6 +282,9 @@ export class DownloadFileComponent implements OnInit {
           // console.log("success");
           //downloadFile
           window.open(this.ytSv.url + "/downloadRep/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV + "&period=" + this.period, "_blank");
+          //  this.urlPdf = this.ytSv.url + "/downloadRep/" + body["id"] + "?yt=" + this.yearTax + "&mt=" + this.monthV + "&period=" + this.period;
+       
+          
 
         });
 
@@ -263,11 +297,11 @@ export class DownloadFileComponent implements OnInit {
     catch (err) {
 
       // this.display = true;
-      console.log("error");
-      console.log(err);
+      // console.log("error");
+      // console.log(err);
 
     }
-    this.monthV = tmpMonth;
+    // this.monthV = tmpMonth;
 
   }//on click
   constructor(private routeA: ActivatedRoute, private ytSv: YtServiceService,
@@ -299,14 +333,15 @@ export class DownloadFileComponent implements OnInit {
     this.monthName = this.ytSv.monthName;
     if (this.repType == "tax")
       this.yearTax = (new Date().getFullYear() + 543 - 1).toString();
-    else if (this.repType == "slip")
+    else if (this.repType == "slip"){
       this.yearTax = (new Date().getFullYear() + 543).toString();
 
-    // this.monthV = '0' + (new Date().getMonth() + 1).toString().slice(-2);
+     this.monthV = '0' + (new Date().getMonth() + 1).toString().slice(-2);
+    // console.log(this.monthV);
     // this.repType="slip";
-    // this.m.nativeElement.optionValue=this.monthV;
-    // this.m.nativeElement.optionLabel = this.monthName[Number(this.monthV) - 1].name;
-
+    this.m.nativeElement.optionValue=this.monthV;
+    this.m.nativeElement.optionLabel = this.monthName[Number(this.monthV) - 1].name;
+    }
     // this.form.controls.month1.setValue(this.monthV);
 
     // this.selectedMonth= { name: "มีนาคม", month: "03" };

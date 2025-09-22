@@ -8,6 +8,7 @@ import { UserDetail } from '../user-detail';
 // import {Title} from "@angular/platform-browser";
 import { YtServiceService } from '../yt-service.service';
 import { DialogModule } from 'primeng/dialog';
+import { environment } from 'src/environments/environment';
 interface ReturnType {
   id: string,
   done: boolean
@@ -25,7 +26,7 @@ export class IndexComponent implements OnInit {
   // private titleService:Title
   accessToken: string = "";
   visible: boolean = false;
-  
+  userDoh: boolean = false;
   constructor(
     private routeParam: ActivatedRoute, 
     // private ytSv: YtServiceService, 
@@ -42,7 +43,15 @@ export class IndexComponent implements OnInit {
   // doc:string="";
   //cntUsr="";
   msg: string = "";
+  msg1: string="";
  async ngOnInit(): Promise<void> {
+  
+//    this.msg1="เนื่องจากเกิดปัญหาการรั่วไหลของรหัสผ่าน"+
+// "ดังนั้นจึงขอให้ทุกท่านทำการเปลี่ยนรหัสผ่านใหม่ด้วย"+
+// "";
+//  alert(this.msg1);
+ 
+  
  
     // this.doc = "https://kkumail-my.sharepoint.com/:b:/p/suchat_kl/EQ5OPSG03_tKvNflOhTiFZ8B6765KK9cEWOGQCtWX-emgQ";
     // this.cntUsr=sessionStorage.getItem("cntUsr")+"";
@@ -68,6 +77,7 @@ export class IndexComponent implements OnInit {
        else if (params['code'] != null) {
           this.visible = false;
           this.accessToken = params['code'];
+          // alert(this.accessToken);
           await this.loginBythID();
         }
 
@@ -79,7 +89,7 @@ export class IndexComponent implements OnInit {
     // console.log(this.token);
     //  }
   }
-  pid:string="";userDoh:boolean=false;
+  pid:string="";
 async validIdcard(idcard:string):Promise<void>{
   // found:Boolean;
   this.userDoh=false;
@@ -127,8 +137,8 @@ async validIdcard(idcard:string):Promise<void>{
   catch (err) {
 
     // this.display = true;
-    console.log("error");
-    console.log(err);
+    // console.log("error");
+    // console.log(err);
 
   }
 
@@ -156,41 +166,123 @@ async validIdcard(idcard:string):Promise<void>{
     // let url = 'http://proxy:root3533@backupdoh.doh.go.th:9000/?' +
     //   encodeURIComponent(
     //     "https://imauth.bora.dopa.go.th/api/v2/oauth2/token/");
-    let url = "https://dbdoh.doh.go.th:9000/getIdthaID?code=" +
+    let url = this.ytSv.url+  "/getIdthaID?code=" +
       this.accessToken +
       "&redirect_uri=" +
       this.ytSv.redirect_url;
+      // alert("url="+url);
     let body=new URLSearchParams();
     // body.set("grant_type","authorization_code");
     // body.set("code",this.accessToken );
     // body.set("redirect_uri",this.ytSv.redirect_url);//""+sessionStorage.getItem("redirect_uri")?.toString()
   // console.log(this.accessToken);
   // console.log(body);
- this.http.post(url,body,header).subscribe(async (response:any)=>{
+ 
+  // this.http.post(url,body,header).subscribe(async (response:any)=>{
+  /*
+    try {//this.loginJson
+      // await this.http.post(this.url, this.loginJson).toPromise().
+      await firstValueFrom(this.http.post(this.url, body,header)).
+        then(async response => {
+          let j = JSON.stringify(response);
+          let obj2 = JSON.parse(j);
+          sessionStorage.setItem("idcard", obj2.pid);
+          alert(obj2.pid);
+          await this.validIdcard(obj2.pid);
+
+          if (!this.userDoh) {
+            this.msg = "ระบบงานนี้ใช้สำหรับข้าราชการลูกจ้างประจำกรมทางหลวง";
+            this.visible = true;
+            // alert(msg);
+            return;
+          }
+          else {
+            await this.logIn();
+            
+          }
+
+
+          // console.log(this.url);
+          // console.log(this.loginJson);
+          // let lastLoginMsg = await this.ytSv.getLastLogin();
+          // this.ytSv.insertLastLogin("yt@thaid"); //not need to use await
+
+        });
+
+    }
+    catch (err) {
+      // catches errors both in fetch and response.json
+      alert(err);
+      // this.display = true;
+      sessionStorage.setItem('passLogin', 'false');
+      return;
+    }
+*/
+
   // alert(response as string) ;
   // alert(response["pid"]);
-   sessionStorage.setItem('idcard', response["pid"]);
-    await this.validIdcard(response["pid"]);
+  //  sessionStorage.setItem('idcard', response["pid"]);
    
    
-   if (!this.userDoh ) {
-    this.msg = "ระบบงานนี้ใช้สำหรับข้าราชการลูกจ้างประจำกรมทางหลวง";
-     this.visible = true;
-    // alert(msg);
-return;
-   }
-   else {
-    await this.logIn();
- 
-   }
+   
+  
    
   // let j = JSON.stringify(response);
   //  // alert(JSON.parse(j));
   //  let obj2: LoginThaID = JSON.parse(j);
   //  alert(obj2.pid);
- });
+//  });
  
- 
+    //start
+    try {//this.loginJson
+      // await this.http.post(this.url, this.loginJson).toPromise().
+      await firstValueFrom(this.http.post(url, body, header)).
+        then(async response => {
+          // alert(response);
+          let j = JSON.stringify(response);
+          let obj2 = JSON.parse(j);
+          // alert(obj2);
+          // sessionStorage.setItem("token", obj2.accessToken);
+          // sessionStorage.setItem('passLogin', 'true');
+          // this.lastLoginMsg = await this.ytSv.getLastLogin();
+          // this.ytSv.insertLastLogin("tax@thaid"); //not need to use await
+
+          sessionStorage.setItem('idcard', obj2["pid"]);
+         let idcard = obj2["pid"];
+
+           await this.validIdcard(idcard);
+          // alert(this.userDoh);
+          if (!this.userDoh ) {
+            this.msg = "ระบบงานนี้ใช้สำหรับข้าราชการลูกจ้างประจำกรมทางหลวง";
+            this.visible = true;
+            // alert(msg);
+            return;
+          }
+          else {
+            await this.logIn();
+          }
+
+
+
+          // console.log(this.url);
+          // console.log(this.loginJson);
+
+
+        });
+
+    }
+    catch (err) {
+      // catches errors both in fetch and response.json
+      alert("error is =>>>" + err);
+      // this.display = true;
+      sessionStorage.setItem('passLogin', 'false');
+      return;
+    }
+
+
+
+    //end
+
   
   
   } //method
@@ -198,8 +290,8 @@ return;
 
   loginJson = {
 
-    "username": "gdbf-7ho9yh'vp^jfy[wx",
-    "password": "fingerPrint@Doh"
+    "username": environment.usr,
+    "password": environment.pwd,
 
   }
   async logIn() { //,{headers:""}
@@ -259,15 +351,17 @@ return;
         .set('Authorization', "Bearer " + sessionStorage.getItem("token")) //   this.response["accessToken"])
         .set('Access-Control-Allow-Origin', '*')
     }
-/*
-    this.url = this.ytSv.url + '/userLogin/' + this.loginJson.username;
-    console.log(this.url);
+    const idcard_json={
+  "username": sessionStorage.getItem('idcard')
+}
+    this.url = this.ytSv.url + '/postuserLogin/';// + sessionStorage.getItem('idcard');
+    // console.log(this.url);
     
     // this.response = await this.http.get(this.url, header).toPromise();
     // console.log(this.response); <UserDetail[]>
     // this.http.get(this.url, header)
     //   .subscribe(response => {
-    await firstValueFrom(this.http.get(this.url, header)).
+    await firstValueFrom(this.http.post(this.url, idcard_json, header)).
       then(response => {
         //console.log(JSON.stringify(response));
         let j = JSON.stringify(response);
@@ -277,7 +371,7 @@ return;
         // this.obj3=response;
         sessionStorage.setItem('userName', obj2.username);
         sessionStorage.setItem('id', (obj2.id).toString());
-        sessionStorage.setItem('idcard', obj2.idcard);
+        // sessionStorage.setItem('idcard', obj2.idcard);
         // console.log(obj2.username);
         // this.usr.userName=obj2[0].username;
         // console.log(this.usr.userName);
@@ -302,32 +396,36 @@ return;
             sessionStorage.setItem("mnuFileDownload", "false");
 
           }
-          //permission Login
-          sessionStorage.setItem("mnuChangePwd", "false");
-          sessionStorage.setItem("mnuResetPwd", "false");
-          // this.showMenu();
-          this.route.navigate(['/downloadfile']);
+          
 
         }
+        //permission Login
+        sessionStorage.setItem("mnuChangePwd", "false");
+        sessionStorage.setItem("mnuResetPwd", "false");
+        // this.showMenu();
+        this.route.navigate(['/downloadfile']);
 
         //console.log(obj2.);
         //   this.token=j["accessToken"];
         //sessionStorage.setItem("token", obj2.accessToken);
       }, error => {
-        console.log(JSON.stringify(error));
+        // console.log(JSON.stringify(error));
       });
-*/
-    sessionStorage.setItem('userName', "");
-    sessionStorage.setItem("mnuFileDownload", "false");
-    sessionStorage.setItem("mnuChangePwd", "true");
+
+    // sessionStorage.setItem('userName', "");
+    // sessionStorage.setItem("mnuFileDownload", "false");
+    // sessionStorage.setItem("mnuChangePwd", "true");
     
     // this.showMenu();
     this.route.navigate(['/downloadfile']);
 
     // chk2Period
     // Map < String, String > res = new HashMap<>();
-    this.url = this.ytSv.url + '/user2Period/' + sessionStorage.getItem("idcard");
-    console.log(this.url);
+// const idcard_json={
+//   "idcard": sessionStorage.getItem("idcard")
+// }
+    this.url = this.ytSv.url + '/postuser2Period/' ;//+ sessionStorage.getItem("idcard");
+    // console.log(this.url);
     header = {
       headers: new HttpHeaders()
         .set('Authorization', "Bearer " + sessionStorage.getItem("token")) //   this.response["accessToken"])
@@ -337,7 +435,7 @@ return;
     // console.log(this.response); <UserDetail[]>
     // this.http.get(this.url, header)
     //   .subscribe(response => {
-    await firstValueFrom(this.http.get(this.url, header)).
+    await firstValueFrom(this.http.post(this.url,idcard_json, header)).
       then(response => {
         //console.log(JSON.stringify(response));
         let j = JSON.stringify(response);
@@ -359,7 +457,7 @@ return;
         }
         // alert('2period'+sessionStorage.getItem('has2Period'));
       }, error => {
-        console.log(JSON.stringify(error));
+        // console.log(JSON.stringify(error));
       });
     //chk2Period
 

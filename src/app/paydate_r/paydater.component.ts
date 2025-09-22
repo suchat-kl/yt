@@ -8,15 +8,15 @@ import { EMPTY, Observable } from 'rxjs';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { YtServiceService } from '../yt-service.service';
 @Component({
-  selector: 'app-paydate',
-  templateUrl: './paydate.component.html',
-  styleUrls: ['./paydate.component.css']
+  selector: 'app-paydater',
+  templateUrl: './paydater.component.html',
+  styleUrls: ['./paydater.component.css']
 })
 
 
 
 
-export class PaydateComponent {
+export class PaydateRComponent {
   type: string = "";
   process(type: string) {
     // let y=this.yearTax;
@@ -40,7 +40,7 @@ export class PaydateComponent {
       alert("ต้องบันทึกปี พ.ศ. 4 หลักเท่านั้น"); return;
     }
 
-    let url = this.ytSv.url + "/insertEff_date" + "?yt=" + this.yearTax;
+    let url = this.ytSv.url + "/insertEff_dateRetired" + "?yt=" + this.yearTax;
 
     let header = {
       headers: new HttpHeaders()
@@ -104,7 +104,7 @@ export class PaydateComponent {
         pk_eff_date: {
           year: "2566",
           month: "01",
-          period: "2"
+          
         },
         eff_date: "26012566",
 
@@ -117,7 +117,7 @@ export class PaydateComponent {
 
   form = this.fb.group({
     eff_date: ['', [Validators.required]],
-    period: ['', [Validators.required]],
+   
     year: ['', [Validators.required]],
     month: ['', [Validators.required]],
     yearTax: ['', [Validators.required]]
@@ -145,7 +145,7 @@ export class PaydateComponent {
         this.yearTax = (new Date().getFullYear() + 543).toString();
       this.form.patchValue({
         eff_date: user.eff_date,
-        period: user.pk_eff_date.period,
+        
         year: user.pk_eff_date.year,
         month: user.pk_eff_date.month,
         yearTax: this.yearTax
@@ -181,7 +181,7 @@ export class PaydateComponent {
         pk_eff_date: {
           year: this.form.value.year!,
           month: this.form.value.month!,
-          period: this.form.value.period!,
+          
         }
         // year: this.form.value.pk_eff_date.year!,
         // month: this.form.value.month!
@@ -213,7 +213,7 @@ export class PaydateComponent {
       }
 
       index = this.users.map(u => (u.pk_eff_date.month
-        ,  u.pk_eff_date.period,u.pk_eff_date.year)
+        ,  u.pk_eff_date.year)
         ).indexOf(this.userSelected.pk_eff_date.month,
           
           );
@@ -225,12 +225,12 @@ export class PaydateComponent {
         pk_eff_date: {
           year: this.form.value.year!,
           month: this.form.value.month!,
-          period: this.form.value.period!,
+          
         }
       };
       //save
-      let url = this.ytSv.url + "/updEff_date?yt=" + this.users[index].pk_eff_date.year + "&mt=" + this.users[index].pk_eff_date.month
-      + "&period=" + this.users[index].pk_eff_date.period
+      let url = this.ytSv.url + "/updEff_dateRetired?yt=" + this.users[index].pk_eff_date.year + "&mt=" + this.users[index].pk_eff_date.month
+     
         + "&eff_date=" + this.users[index].eff_date;
       let header = {
         headers: new HttpHeaders()
@@ -276,7 +276,7 @@ export class PaydateComponent {
 
   }
   getUsers(): Observable<User[]> {
-    let url: string = this.ytSv.url + "/selectEff_date?yt=" + this.yearTax;
+    let url: string = this.ytSv.url + "/selectEff_dateRetired?yt=" + this.yearTax;
     // let URL: string = "https://yourbackend";
     let header = {
       headers: new HttpHeaders()
@@ -309,7 +309,7 @@ export class PaydateComponent {
       // id: '-',
       eff_date: '',
       pk_eff_date: {
-        year: '', month: '', period: '2',
+        year: '', month: ''
       }
       // pk_eff_date.year: '',
       // pk_eff_date.month: ''
@@ -357,7 +357,7 @@ export interface User {
   pk_eff_date: {
     year: string;
     month: string;
-    period: string;
+    
   }
   eff_date: string;
   

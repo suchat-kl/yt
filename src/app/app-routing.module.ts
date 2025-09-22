@@ -11,6 +11,7 @@ import { ResetPwdComponent } from './reset-pwd/reset-pwd.component';
 import { UploadImgComponent } from './upload-img/upload-img.component';
 import { PaydateComponent } from './paydate/paydate.component';
 import { ChangeusrComponent } from './changeusr/changeusr.component';
+import { PaydateRComponent } from './paydate_r/paydater.component';
 const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'register', component: RegisterComponent },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'resetpwd', component: ResetPwdComponent },
   { path: 'paydate', component: PaydateComponent },
   { path: 'changeusr',component:ChangeusrComponent},
+  { path: 'paydater', component: PaydateRComponent },
   { path: '**', component: IndexComponent }, //this is last line only
 ];
 

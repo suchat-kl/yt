@@ -51,6 +51,7 @@ export class ResetPwdComponent implements OnInit {
         let data = JSON.stringify(response);
         let obj: ResetpwdOutput = JSON.parse(data);
         this.userName = obj.username;
+        alert("กำหนดรหัสผ่านใหม่เรียบร้อยแล้ว")
       }, error => {
         // console.log(error);
         this.display = true;
@@ -72,13 +73,13 @@ export class ResetPwdComponent implements OnInit {
     let url = 'http://dbdoh.doh.go.th:9000/resetpwd';
       this.http.post(url, body)
       .subscribe(response => {
-        console.log(response);    
+        // console.log(response);    
         this.route.navigate(['']);
       }, error => {
        // console.log(error);
         data = JSON.stringify(error);
         let obj: ErrMsg = JSON.parse(data);
-        console.log(obj.message);
+        // console.log(obj.message);
         alert("err");
       }
       );

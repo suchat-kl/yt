@@ -267,15 +267,15 @@ export class UploadImgComponent implements OnInit {
             this.disableDelete = true;
             this.disableInsert = false;
             alert(this.msg_err);
-           console.log(value);
+          //  console.log(value);
           });
 
       }
       catch (err) {
 
         // this.display = true;
-        console.log("error");
-        console.log(err);
+        // console.log("error");
+        // console.log(err);
 
       }
 
@@ -327,8 +327,8 @@ export class UploadImgComponent implements OnInit {
         catch (err) {
 
           // this.display = true;
-          console.log("error");
-          console.log(err);
+          // console.log("error");
+          // console.log(err);
 
         }
 

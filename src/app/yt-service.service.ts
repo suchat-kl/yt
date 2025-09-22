@@ -15,7 +15,10 @@ interface ReturnType {
 export class YtServiceService {
   // [x: string]: any;
   // private route: ActivatedRoute,
-  constructor(private http: HttpClient, private titleService: Title) { }
+  constructor(private http: HttpClient, private titleService: Title) { 
+    
+    
+  }
   // title:string=""; use 9000  27017
   async getLastLogin(): Promise<string> {
     let lastLoginMsg = "";
@@ -52,8 +55,8 @@ export class YtServiceService {
     catch (err) {
 
       // this.display = true;
-      console.log("error");
-      console.log(err);
+      // console.log("error");
+      // console.log(err);
 
     }
     return lastLoginMsg;
@@ -107,8 +110,8 @@ export class YtServiceService {
     catch (err) {
 
       // this.display = true;
-      console.log("error");
-      console.log(err);
+      // console.log("error");
+      // console.log(err);
 
     }
   }
@@ -121,10 +124,25 @@ export class YtServiceService {
   }
 */
 
-  private _url = 'https://dbdoh.doh.go.th:9000'; //develop dbdoh production backupdoh
+  // private _url= 'https://dbdoh.doh.go.th/saldoh'; //:9000 :27017
+  private  _i:number=0;
+  private _url = 'https://dbdoh.doh.go.th:9000';
   public get url() {
     return this._url;
   }
+  private _onedisplay=true;
+  public get onedisplay(){
+    if (this._i == 0) {
+      this._i=10;
+      return this._onedisplay;
+    }
+      
+    
+    return false;
+  }
+  // public set onedisplay(d :boolean){
+  //   this._onedisplay=d;
+  // }
   private _redirect_url = "https://dbdoh.doh.go.th/yt";
   // private _redirect_url = "http://localhost:4200/yt";
   public get redirect_url() {

@@ -41,7 +41,7 @@ export class ChangePwdComponent implements OnInit {
   onclick(value: any): void {
     this.data = JSON.stringify(value);
     let obj: UsrpwdForm = JSON.parse(this.data);
-    console.log(obj);
+    // console.log(obj);
     let body = {
       "name": "abc",
       "username": "doh",
@@ -50,7 +50,7 @@ export class ChangePwdComponent implements OnInit {
       "idcard": "0000000000006"
     }
     body["password"] = obj.password;
-    console.log(body);
+    // console.log(body);
     let url = this.ytSv.url + '/changepwd/' + sessionStorage.getItem('id');
     //'http://dbdoh.doh.go.th:9000/changepwd/' + sessionStorage.getItem('id');
     let header = {

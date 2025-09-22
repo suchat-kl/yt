@@ -73,13 +73,13 @@ export class ChangeusrComponent implements OnInit {
     let url = 'http://dbdoh.doh.go.th:9000/resetpwd';
       this.http.post(url, body)
       .subscribe(response => {
-        console.log(response);    
+        // console.log(response);    
         this.route.navigate(['']);
       }, error => {
        // console.log(error);
         data = JSON.stringify(error);
         let obj: ErrMsg = JSON.parse(data);
-        console.log(obj.message);
+        // console.log(obj.message);
         alert("err");
       }
       );

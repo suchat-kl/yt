@@ -1,0 +1,34 @@
+async checkOneLogin() {
+  let url = "https://onelogin.doh.go.th:8080/api/authen";
+  let body = {
+    "code": "951a5a4c30311b4eb900a63dba9cf32428fc007f61af53f366585c461e3fc0d1",
+  };
+  sessionStorage.setItem('tokenOneLogin', "fail");
+  try {//this.loginJson
+    // await this.http.post(this.url, this.loginJson).toPromise().
+    await firstValueFrom(this.http.post(url, body)).
+      then(response => {
+        let j = JSON.stringify(response);
+        let obj2: OneLoginApi = JSON.parse(j);
+        if (obj2.status && obj2.code == '200') {
+          sessionStorage.setItem("status", "true");
+          sessionStorage.setItem("code", "200");
+          sessionStorage.setItem('tokenOneLogin', obj2.token);
+        }
+        // console.log(this.url);
+        // console.log(this.loginJson);
+        // this.ytSv.loginBy="userNamePwd";
+
+      });
+
+  }
+  catch (err) {
+    // catches errors both in fetch and response.json
+    // alert(err);
+    // this.display = true;
+    // sessionStorage.setItem('passLogin', 'false');
+    sessionStorage.setItem('tokenOneLogin', "fail");
+    return;
+  }
+
+}

@@ -1,5 +1,5 @@
 ng build --configuration production
-ng serve
+ng serve -o
 
 npm update primeng --save
 ng update @angular/cli @angular/core --force

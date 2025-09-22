@@ -34,10 +34,10 @@
     <div class="col-12 col-sm-5  mt-3">
         <span class="label">
             <label for="month">เดือนรายงานสลิป</label>
-            <select id="month" [disabled]="process!='slip'" #m class="form-control" [(ngModel)]="monthV"
+            <select id="month" [disabled]="process!=3 && process != 4" #m class="form-control" [(ngModel)]="monthV"
                 (change)="changeSelect($event)">
                 <option [value]="00" disabled>เลือกเดือนรายงานสลิป</option>
-                <option *ngFor="let m of monthName " [disabled]="process!='slip'" [value]="m.month">
+                <option *ngFor="let m of monthName "    [selected]="m.month.toString().trim() == monthV" [disabled]="process!=3 && process != 4" [value]="m.month">
                     {{m.name}} </option>
             </select>
         </span>
@@ -62,9 +62,10 @@
         <span class="p-float-label">
             <!-- [(ngModel)]="userName" -->
             <p>
-                <input type="radio" value="present" name="personType" [ngModel]="process" (change)="changeRepType($event)" > ภาษีบุคคลปัจจุบัน
-                <input type="radio" value="retired" name="personType" [ngModel]="process" (change)="changeRepType($event)"> ภาษีผู้รับบำนาญ
-                <input type="radio" value="slip" name="personType" [ngModel]="process" (change)="changeRepType($event)"> สลิป
+                <input type="radio" value=1 name="personType" [ngModel]="process" (change)="changeRepType($event)" > ภาษีบุคคลปัจจุบัน
+                <input type="radio" value=2 name="personType" [ngModel]="process" (change)="changeRepType($event)"> ภาษีผู้รับบำนาญ
+                <input type="radio" value=3 name="personType" [ngModel]="process" (change)="changeRepType($event)"> สลิปบุคคลปัจจุบัน
+                <input type="radio" value=4 name="personType" [ngModel]="process" (change)="changeRepType($event)"> สลิปผู้รับบำนาญ
             </p>
         </span>
     </div>
@@ -80,7 +81,7 @@
             <div class="col-12 col-sm-8 mt-3">
                 <div class="custom-file">
                     <input type="file" name="filetxt" id="filetxt" class="custom-file-input" (change)="onChange($event)"
-                        #fileLocal="ngModel" ngModel required accept=".txt">
+                        #fileLocal="ngModel" ngModel required accept=".txt,.xlsx">
                     {{fileSize}}
                 </div>
 

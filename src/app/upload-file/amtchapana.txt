@@ -1,0 +1,45 @@
+"amt":
+              data[7] == "กองบังคับการตำรวจทางหลวง" ? "0" :
+                data[7] == "กลุ่มงานถวายความปลอดภัย" ? "0" :
+                  data[7] == "ฝอ.ทล" ? "0" :
+                    this.safeTrim(data[100]) == "ฌปก." ?
+                      (parseFloat(data[101]) / 100).toString() :
+                      this.safeTrim(data[103]) == "ฌปก." ?
+                        (parseFloat(data[104]) / 100).toString() :
+                        this.safeTrim(data[106]) == "ฌปก." ?
+                          (parseFloat(data[107]) / 100).toString() :
+                          this.safeTrim(data[109]) == "ฌปก." ?
+                            (parseFloat(data[110]) / 100).toString() :
+                            this.safeTrim(data[112]) == "ฌปก." ?
+                              (parseFloat(data[113]) / 100).toString() :
+                              this.safeTrim(data[115]) == "ฌปก." ?
+                                (parseFloat(data[116]) / 100).toString() :
+                                this.safeTrim(data[118]) == "ฌปก." ?
+                                  (parseFloat(data[119]) / 100).toString() :
+                                  this.safeTrim(data[121])== "ฌปก." ?
+                                    (parseFloat(data[122]) / 100).toString() :
+                                    this.safeTrim(data[124]) == "ฌปก." ?
+                                      (parseFloat(data[125]) / 100).toString() :
+                                      this.safeTrim(data[127]) == "ฌปก." ?
+                                        (parseFloat(data[128]) / 100).toString() :
+                                        this.safeTrim(data[130]) == "ฌปก." ?
+                                          (parseFloat(data[131]) / 100).toString() :
+                                          this.safeTrim(data[133]) == "ฌปก." ?
+                                            (parseFloat(data[134]) / 100).toString() :
+                                            this.safeTrim(data[136]) == "ฌปก." ?
+                                              (parseFloat(data[137]) / 100).toString() :
+                                              this.safeTrim(data[139]) == "ฌปก." ?
+                                                (parseFloat(data[140]) / 100).toString() :
+                                                this.safeTrim(data[142]) == "ฌปก." ?
+                                                  (parseFloat(data[143]) / 100).toString() :
+                                                  this.safeTrim(data[145]) == "ฌปก." ?
+                                                    (parseFloat(data[146]) / 100).toString() :
+                                                    this.safeTrim(data[148]) == "ฌปก." ?
+                                                      (parseFloat(data[149]) / 100).toString() :
+                                                      this.safeTrim(data[151]) == "ฌปก." ?
+                                                        (parseFloat(data[152]) / 100).toString() :
+                                                        this.safeTrim(data[154]) == "ฌปก." ?
+                                                          (parseFloat(data[155]) / 100).toString() :
+                                                          this.safeTrim(data[157])== "ฌปก." ?
+                                                            (parseFloat(data[158]) / 100).toString() : "0"
+            

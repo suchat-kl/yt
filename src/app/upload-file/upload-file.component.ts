@@ -21,6 +21,43 @@ interface MonthType {
 })
 export class UploadFileComponent implements OnInit {
   @ViewChild('m') m!: ElementRef;
+  async uploadFileExcel(file: File){
+    let url = this.ytSv.url + "/upload";//?m="+this.monthV+"&y="+this.yearTax+"&type="+this.typePerson;
+    let header = {
+      headers: new HttpHeaders()
+        .set('Authorization', "Bearer " + sessionStorage.getItem("token"))
+    }
+    const uploadXlsData = new FormData();
+    uploadXlsData.append('slipR', file);//, file.name);
+    try {//,header
+      await lastValueFrom(this.http.post(url, uploadXlsData, header)).
+        then(response => {
+          // let j = JSON.stringify(response);
+          // let obj2: LoginApi = JSON.parse(j);
+          // console.log(response);
+          // console.log("success");
+          //this.route.navigate(['']);
+          // this.disableUpdate = false;
+
+          // this.disableInsert = true;
+          // this.disableDelete = true;
+          return;
+        });
+
+    }
+    catch (err) {
+
+      // this.display = true;
+      // console.log("error");
+      // console.log(err);
+
+    }
+
+
+
+
+
+  }
   changeYearTax(e: any) {
     this.yearTax = e.target.value.toString().trim();
   }
@@ -41,7 +78,7 @@ export class UploadFileComponent implements OnInit {
   changeRepType(e: any) {
     this.process = e.target.value;
     // alert(this.monthV);
-    if (this.process != "slip") {
+    if (this.process == 1 || this.process == 2) {
       this.yearTax = (new Date().getFullYear() + 543 - 1).toString();
       this.m.nativeElement.disabled
 
@@ -49,12 +86,18 @@ export class UploadFileComponent implements OnInit {
     }
     else {
       this.yearTax = (new Date().getFullYear() + 543).toString();
+
       // this.titleYear = "ปี พ.ศ.";
     }
   }
+
+
+
   monthV: string = "";
   monthName: MonthType[] = [];
-  process: string = "retired"; //present
+  // process: string = "retired"; //present
+  
+  process: number = 1;// [ 'present' , 'retired' , 'slip', 'slipRetired'];
   disableInsert: boolean = true;
   disableDelete: boolean = true;
   period: string = "2";//will be edit
@@ -101,7 +144,8 @@ export class UploadFileComponent implements OnInit {
     r16N: string; r16V: string; r17N: string; r17V: string; r18N: string; r18V: string;
     r19N: string; r19V: string; r20N: string; r20V: string;
     c162: string; c163: string; gpfp1: string; gpfp1add: string; netp1: string;
-    gpfp2: string; gpfp2add: string; netp2: string; subdiv: string;emp_type:string;
+    gpfp2: string; gpfp2add: string; netp2: string; subdiv: string; emp_type: string;
+    amt: string;
   } = {
       year: "", month: "", id_card: "", title: "",
       fname: "", lname: "", //doh, position 6 doh not use
@@ -164,7 +208,7 @@ export class UploadFileComponent implements OnInit {
       c162: "", c163: "",
       gpfp1: "", gpfp1add: "", netp1: "",
       gpfp2: "", gpfp2add: "", netp2: "",
-      subdiv: "",emp_type:"",
+      subdiv: "", emp_type: "", amt: ""
     };
   jsonOutputSlipArr: {
     year: string; month: string; id_card: string; title: string;
@@ -208,7 +252,7 @@ export class UploadFileComponent implements OnInit {
     c162: string; c163: string;
     gpfp1: string; gpfp1add: string; netp1: string;
     gpfp2: string; gpfp2add: string; netp2: string;
-    subdiv: string;emp_type:string;
+    subdiv: string; emp_type: string; amt: string;
   }[] = [];
 
   jsonOutput: {
@@ -242,9 +286,11 @@ export class UploadFileComponent implements OnInit {
   typePerson: string = "";
   //fileGloblal: File | undefined;
   // maxSize=5*1024*1024;
+  safeTrim(value: string | null | undefined): string {
+  return value ? value.trim() : '';
+}
 
-
-  onChange = (event: Event) => {
+  onChange = async (event: Event) => {
     //let FS = require('fs');
     let dStr = ""; let delimiter = "";
     const target = event.target as HTMLInputElement;
@@ -255,27 +301,40 @@ export class UploadFileComponent implements OnInit {
     this.fileName = file.name;
     this.disableInsert = true;
     this.disableDelete = true;
+    // alert(this.process.toString());
+    if (this.process == 4) {
+      // alert(this.process.toString());
+      // alert(file.type.toString()); //application / vnd.openxmlformats - officedocument.spreadsheetml.sheet
+      //if (!(file.type.toString() === "application / vnd.openxmlformats - officedocument.spreadsheetml.sheet")) {
+        if (!(file.name.endsWith('.xlsx'))){
+        // alert("not eq")
+        // alert("ต้องเลือกไฟล์ข้อความเท่านั้น");
+        this.display = true; this.msg_err = "ต้องเลือกไฟล์Excel(*.xlsx)เท่านั้น";
+        return;
+      }
 
-
+    }
+else {
     //console.log(file.type.toString());
     if (!(file.type.toString() == "text/plain")) {
       // alert("ต้องเลือกไฟล์ข้อความเท่านั้น");
       this.display = true; this.msg_err = "ต้องเลือกไฟล์ข้อความเท่านั้น";
       return;
     }
+  }
     let fname: string = "";
     let fname1: string = "";
     let fname2: string = "";
     this.sizeMaxFile = 5;
-    if (this.process == "present") {
+    if (this.process == 1) {
       fname = "tax".concat(this.yearTax).concat(".txt");
       delimiter = "$";//"$"
     }
-    else if (this.process == "retired") {
+    else if (this.process == 2) {
       fname = "retired".concat(this.yearTax).concat(".txt");
       delimiter = "|";
     }
-    else if (this.process == "slip") {
+    else if (this.process == 3) {
       fname1 = "slip".concat(this.yearTax).concat(this.monthV).concat("G").concat(".txt");
       fname2 = "slip".concat(this.yearTax).concat(this.monthV).concat("E").concat(".txt");
       delimiter = "$";
@@ -290,9 +349,23 @@ export class UploadFileComponent implements OnInit {
       else if (this.fileName == fname2) this.typePerson = "E";
 
     }
+    else if (this.process == 4) {
+      fname1 = "slipR".concat(this.yearTax).concat(this.monthV).concat("G").concat(".xlsx");
+      fname2 = "slipR".concat(this.yearTax).concat(this.monthV).concat("E").concat(".xlsx");
+      delimiter = "";
+      this.sizeMaxFile = 15;
 
+      if (!(file.name == fname1 || file.name == fname2)) {
+        //alert("ต้องใช้ชื่อไฟล์:  " + fname);
+        this.display = true; this.msg_err = "ต้องใช้ชื่อไฟล์:  " + fname1 + " หรือ " + fname2;
+        return;
+      }
+      if (this.fileName == fname1) this.typePerson = "G";
+      else if (this.fileName == fname2) this.typePerson = "E";
 
-    if (!(file.name == fname) && this.process != "slip") {
+    }
+
+    if (!(file.name == fname) && (this.process != 3) && (this.process != 4)) {
       //alert("ต้องใช้ชื่อไฟล์:  " + fname);
       this.display = true; this.msg_err = "ต้องใช้ชื่อไฟล์:  " + fname;
       return;
@@ -302,12 +375,22 @@ export class UploadFileComponent implements OnInit {
     // console.log(this.fileName.substr(-3).toLowerCase());
     // this.isTxt = true;
     // if (!(this.fileName.substr(-3).toLowerCase() === "txt")) {
-    let l = this.fileName.length;
-    if (!(this.fileName.substring(l - 3).toLowerCase() === "txt")) {
-      //  this.isTxt = false;
-      // alert("ต้องเลือกไฟล์ข้อความเท่านั้นนามสกุล txt");
-      this.display = true; this.msg_err = "ต้องเลือกไฟล์ข้อความเท่านั้นนามสกุล txt";
-      return;
+    if (this.process != 4) {
+      let l = this.fileName.length;
+      if (!(this.fileName.substring(l - 3).toLowerCase() === "txt")) {
+        //  this.isTxt = false;
+        // alert("ต้องเลือกไฟล์ข้อความเท่านั้นนามสกุล txt");
+        this.display = true; this.msg_err = "ต้องเลือกไฟล์ข้อความเท่านั้นนามสกุล txt";
+        return;
+      }
+    } else {
+      let l = this.fileName.length;
+      if (!(this.fileName.substring(l - 4).toLowerCase() === "xlsx")) {
+        //  this.isTxt = false;
+        // alert("ต้องเลือกไฟล์ข้อความเท่านั้นนามสกุล txt");
+        this.display = true; this.msg_err = "ต้องเลือกไฟล์Excelเท่านั้นนามสกุล xlsx";
+        return;
+      }
     }
     let fs = file.size / 1024 / 1024;
     // this.sizeMax = false;
@@ -316,7 +399,7 @@ export class UploadFileComponent implements OnInit {
       //this.sizeMax = true;
       // alert("ขนาดเกิน 5 MB");
       this.display = true;
-      this.process == "slip" ?
+      this.process == 3 || this.process == 4 ?
         this.msg_err = "ขนาดเกิน 15 MB"
         :
         this.msg_err = "ขนาดเกิน 5 MB";
@@ -324,6 +407,16 @@ export class UploadFileComponent implements OnInit {
     }
     let s = (fs).toFixed(2).toString().concat(" MB");
     this.fileSize = "ขนาด " + s;
+    
+    if (this.process == 4) {
+      // alert("complete");
+      // api upload file excel
+      await this.uploadFileExcel(file);
+      this.disableDelete = false;
+      return;
+    }
+
+
     let reader = new FileReader();
     // reader.readAsDataURL(file);
 
@@ -340,7 +433,7 @@ export class UploadFileComponent implements OnInit {
       for (const line of this.base64.split(/[\r\n]+/)) {
         data = line.split(delimiter);
 
-        if (this.process == "present") {
+        if (this.process == 1) {
           if (data[10] == null || typeof data[10] === 'undefined') { //yearTax
             continue;
           }
@@ -377,7 +470,7 @@ export class UploadFileComponent implements OnInit {
           
           */
         }
-        else if (this.process == "retired") {
+        else if (this.process == 2) {
           run++;
           if (data[13] == null) {
             data[13] = this.yearTax;
@@ -402,7 +495,7 @@ export class UploadFileComponent implements OnInit {
             "s": data[18], "t": data[19], "xx": run.toString()
           });
         }
-        else if (this.process == "slip" && this.typePerson == "G") {
+        else if (this.process == 3 && this.typePerson == "G") {
           // period
           /*
            if (sessionStorage.getItem("dStr") == null) {
@@ -537,55 +630,56 @@ export class UploadFileComponent implements OnInit {
             "a14V": ((parseFloat(data[81]) + parseFloat(data[82])) / 100).toString(),
             "a15N": data[84],
             "a15V": ((parseFloat(data[85]) + parseFloat(data[86])) / 100).toString(),
-            "r1N": data[100],
+            "r1N": this.safeTrim(data[100]),
             "r1V": (parseFloat(data[101]) / 100).toString(),
-            "r2N": data[103],
+            "r2N": this.safeTrim(data[103]),
             "r2V": (parseFloat(data[104]) / 100).toString(),
-            "r3N": data[106],
+            "r3N": this.safeTrim(data[106]),
             "r3V": (parseFloat(data[107]) / 100).toString(),
-            "r4N": data[109],
+            "r4N": this.safeTrim(data[109]),
             "r4V": (parseFloat(data[110]) / 100).toString(),
-            "r5N": data[112],
+            "r5N": this.safeTrim(data[112]),
             "r5V": (parseFloat(data[113]) / 100).toString(),
-            "r6N": data[115],
+            "r6N": this.safeTrim(data[115]),
             "r6V": (parseFloat(data[116]) / 100).toString(),
-            "r7N": data[118],
+            "r7N": this.safeTrim(data[118]),
             "r7V": (parseFloat(data[119]) / 100).toString(),
-            "r8N": data[121],
+            "r8N": this.safeTrim(data[121]),
             "r8V": (parseFloat(data[122]) / 100).toString(),
-            "r9N": data[124],
+            "r9N": this.safeTrim(data[124]),
             "r9V": (parseFloat(data[125]) / 100).toString(),
-            "r10N": data[127],
+            "r10N": this.safeTrim(data[127]),
             "r10V": (parseFloat(data[128]) / 100).toString(),
-            "r11N": data[130],
+            "r11N": this.safeTrim(data[130]),
             "r11V": (parseFloat(data[131]) / 100).toString(),
-            "r12N": data[133],
+            "r12N": this.safeTrim(data[133]),
             "r12V": (parseFloat(data[134]) / 100).toString(),
-            "r13N": data[136],
+            "r13N": this.safeTrim(data[136]),
             "r13V": (parseFloat(data[137]) / 100).toString(),
-            "r14N": data[139],
+            "r14N": this.safeTrim(data[139]),
             "r14V": (parseFloat(data[140]) / 100).toString(),
-            "r15N": data[142],
+            "r15N": this.safeTrim(data[142]),
             "r15V": (parseFloat(data[143]) / 100).toString(),
-            "r16N": data[145],
+            "r16N": this.safeTrim(data[145]),
             "r16V": (parseFloat(data[146]) / 100).toString(),
-            "r17N": data[148],
+            "r17N": this.safeTrim(data[148]),
             "r17V": (parseFloat(data[149]) / 100).toString(),
-            "r18N": data[151],
+            "r18N": this.safeTrim(data[151]),
             "r18V": (parseFloat(data[152]) / 100).toString(),
-            "r19N": data[154],
+            "r19N": this.safeTrim(data[154]),
             "r19V": (parseFloat(data[155]) / 100).toString(),
-            "r20N": data[157],
+            "r20N": this.safeTrim(data[157]),
             "r20V": (parseFloat(data[158]) / 100).toString(),
             "subdiv": data[9],
             "emp_type": this.typePerson,
+            "amt":"0.0",
           });
 
 
 
 
         } //G
-        else if (this.process == "slip" && this.typePerson == "E") { //E old format 1 period
+        else if (this.process == 3 && this.typePerson == "E") { //E old format 1 period
           this.jsonOutputSlipArr.push({
             "year": data[0], "month": data[1], "id_card": data[2],
             "title": data[3], "fname": data[4], "lname": data[5], "divname": data[7],
@@ -598,7 +692,7 @@ export class UploadFileComponent implements OnInit {
             "c17": (parseFloat(data[16]) / 100).toString(),
 
             "c18": (parseFloat(data[17]) / 100).toString(),
-            "c19": (parseFloat(data[18]) / 100).toString(), 
+            "c19": (parseFloat(data[18]) / 100).toString(),
             "c20": (parseFloat(data[19]) / 100).toString(),
             "c21": (parseFloat(data[20]) / 100).toString(),
             "c22": (parseFloat(data[21]) / 100).toString(),
@@ -617,9 +711,9 @@ export class UploadFileComponent implements OnInit {
             "c34": data[33],
             "c35": (parseFloat(data[34]) / 100).toString(),
             "c36": data[35],
-            "c37": (parseFloat(data[36]) / 100).toString() ,
+            "c37": (parseFloat(data[36]) / 100).toString(),
             "c38": data[37],
-            "c39": (parseFloat(data[38]) / 100).toString(), 
+            "c39": (parseFloat(data[38]) / 100).toString(),
             "c40": data[39],
             "c41": (parseFloat(data[40]) / 100).toString(),
             "c42": (parseFloat(data[41]) / 100).toString(),
@@ -631,7 +725,7 @@ export class UploadFileComponent implements OnInit {
             "c46": (parseFloat(data[45]) / 100).toString(),
             "c47": (parseFloat(data[46]) / 100).toString(),
             "c48": ((parseFloat(data[47])) / 100).toString(),
-            "c49": (( parseFloat(data[48])) / 100).toString(),
+            "c49": ((parseFloat(data[48])) / 100).toString(),
 
             "c50": (parseFloat(data[49]) / 100).toString(),
             "c51": (parseFloat(data[50]) / 100).toString(),
@@ -671,10 +765,10 @@ export class UploadFileComponent implements OnInit {
             "c163": "",
 
             "gpfp1": "0",
-            "gpfp1add":"0",
+            "gpfp1add": "0",
             "netp1": "0",
             "gpfp2": "0",
-            "gpfp2add":"0",
+            "gpfp2add": "0",
             "netp2": "0",
 
             "sahaDeps": "", "sahaTotl": "", "loanOth": "",
@@ -751,7 +845,8 @@ export class UploadFileComponent implements OnInit {
             "r20N": "",
             "r20V": "0",
             "subdiv": "",
-            "emp_type":this.typePerson,
+            "emp_type": this.typePerson,
+            "amt": "0"
           });
 
 
@@ -769,11 +864,14 @@ export class UploadFileComponent implements OnInit {
     };
     //console.log(this.dateNum);
     //this.updateDateStr();
-    if (this.process == "present" ||
-      this.process == "retired"
-    ) {
-      sessionStorage.removeItem("dStr");
-    }
+    // if (this.process == 1) {
+    //   sessionStorage.removeItem("dStr");
+    // }
+    // this.process == 1 ? sessionStorage.removeItem("dStr"):
+    //   this.process == 4? sessionStorage.removeItem("dStr")://console.log("x");
+   
+   
+    
   };  //on change file
   updateDateStr() {
     let monthStr =
@@ -848,8 +946,8 @@ export class UploadFileComponent implements OnInit {
       catch (err) {
 
         // this.display = true;
-        console.log("error");
-        console.log(err);
+        // console.log("error");
+        // console.log(err);
 
       }
 
@@ -880,8 +978,8 @@ export class UploadFileComponent implements OnInit {
         catch (err) {
 
           // this.display = true;
-          console.log("error");
-          console.log(err);
+          // console.log("error");
+          // console.log(err);
 
         }
 
@@ -916,7 +1014,7 @@ export class UploadFileComponent implements OnInit {
 
     }
     if (!this.disableDelete) {
-      let url = this.ytSv.url + "/delYTslip/" + this.yearTax + "/" + this.monthV + "/" + this.period+"/"+this.typePerson;//+"?file="+this.fileGloblal;
+      let url = this.ytSv.url + "/delYTslip/" + this.yearTax + "/" + this.monthV + "/" + this.period + "/" + this.typePerson;//+"?file="+this.fileGloblal;
       // console.log(body);
       try {
         await lastValueFrom(this.http.delete(url, header)).
@@ -934,8 +1032,8 @@ export class UploadFileComponent implements OnInit {
       catch (err) {
 
         // this.display = true;
-        console.log("error");
-        console.log(err);
+        // console.log("error");
+        // console.log(err);
 
       }
 
@@ -971,8 +1069,8 @@ export class UploadFileComponent implements OnInit {
         catch (err) {
 
           // this.display = true;
-          console.log("error");
-          console.log(err);
+          // console.log("error");
+          // console.log(err);
 
         }
 
@@ -992,14 +1090,131 @@ export class UploadFileComponent implements OnInit {
 
   }
   //slip
+
+
+  //slipRetire
+  async slipRetire(value: any) {
+    // alert("retired");
+   let  header = {
+      headers: new HttpHeaders()
+      .set('Authorization', "Bearer " + sessionStorage.getItem("token"))
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')   
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Access-Control-Allow-Credentials', 'true')     
+      .set("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
+      .set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+
+
+    }
+    if (!this.disableDelete) {
+      let url = this.ytSv.url + "/delYTslipRetired/" + this.yearTax + "/" + this.monthV+"/" + this.typePerson;//+"?file="+this.fileGloblal;
+      // console.log(body);
+      try {
+        await lastValueFrom(this.http.delete(url, header)).
+          then(response => {
+
+            this.display = false;
+            this.msg_err = "ลบข้อมูลเสร็จแล้ว....";
+            this.disableDelete = true;
+            this.disableInsert = false;
+            alert(this.msg_err);
+
+          });
+
+      }
+      catch (err) {
+
+        // this.display = true;
+        // console.log("error");
+        // console.log(err);
+        alert(err);
+      }
+
+      return;
+    } //delete
+
+
+
+    if (!this.disableInsert) {
+      // console.log(body);
+
+
+      // await lastValueFrom(this.http.get("/createPosno")).
+      //   then(response => {
+      //   });
+      let url = this.ytSv.url + "/processXls?year="+this.yearTax+"&month="+this.monthV+"&type="+this.typePerson;
+      try {
+        await lastValueFrom(this.http.post(url, header)).
+          then(response => {
+// console.log(header)
+           
+
+          });
+
+      }
+      catch (err) {
+
+        // this.display = true;
+        // console.log("error is ******");
+        // console.log(err);
+        alert("has error:"+err);
+        return;
+      }
+
+
+/*
+      for (let i = 0; i < this.jsonOutputSlipArr.length; i++) {
+        this.jsonOutputSlip = this.jsonOutputSlipArr[i];
+        let body = this.jsonOutputSlip;
+        try {//,header
+          await lastValueFrom(this.http.post(url, body)).
+            then(response => {
+
+
+              this.disableInsert = true;
+              this.disableDelete = true;
+
+            });
+
+        }
+        catch (err) {
+
+          // this.display = true;
+          // console.log("error");
+          // console.log(err);
+
+        }
+
+
+      }//for
+
+*/
+      this.disableInsert = true;
+      this.disableDelete = true;
+      this.display = false;
+      this.msg_err = "เพิ่มข้อมูลจากไฟล์ Excel เสร็จแล้ว....";
+      alert(this.msg_err);
+      return;
+    }//insert
+
+
+
+  }
+  //slipRetire
   async onclick(value: any) {
-    if (this.process == "retired") {
+    if (this.process == 2) {
       this.retired(value);
       // console.log(this.process);
       return;
     }
-    else if (this.process == "slip") {
+    else if (this.process == 3) {
       this.slip(value);
+      // console.log(this.process);
+      return;
+    }
+    else if (this.process == 4) {
+      this.slipRetire(value);
       // console.log(this.process);
       return;
     }
@@ -1050,8 +1265,8 @@ export class UploadFileComponent implements OnInit {
       catch (err) {
 
         // this.display = true;
-        console.log("error");
-        console.log(err);
+        // console.log("error");
+        // console.log(err);
 
       }
 
@@ -1088,8 +1303,8 @@ export class UploadFileComponent implements OnInit {
         catch (err) {
 
           // this.display = true;
-          console.log("error");
-          console.log(err);
+          // console.log("error");
+          // console.log(err);
 
         }
 
@@ -1119,7 +1334,7 @@ export class UploadFileComponent implements OnInit {
     }
     // this.yearTax = (new Date().getFullYear() + 543 - 1).toString();
     this.monthName = this.ytSv.monthName;
-    if (this.process != "slip")
+    if (this.process != 3 && this.process != 4)
       this.yearTax = (new Date().getFullYear() + 543 - 1).toString();
     else
       this.yearTax = (new Date().getFullYear() + 543).toString();

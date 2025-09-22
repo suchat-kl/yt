@@ -56,18 +56,22 @@
                     </p-dropdown>
 
                 </div> -->
-                <!-- [selected]="m.month.toString().trim() == monthV" -->
-
+                <!-- [selected]="m.month.toString().trim() == monthV" 
+                [disabled]="repType=='tax'" 
+                [disabled]="repType=='tax'"
+                -->
+                <div *ngIf="repType !='tax'" >
                 <span class="label">
                     <label for="month">เดือนรายงานสลิป</label>
-                    <select id="month" [disabled]="repType=='tax'" #m class="form-control" [(ngModel)]="monthV"
+                    <select id="month"  #m class="form-control" [(ngModel)]="monthV"
                         (change)="changeSelect($event)">
                         <option [value]="00" disabled>เลือกเดือนรายงานสลิป</option>
-                        <option *ngFor="let m of monthName " [disabled]="repType=='tax'" [value]="m.month">
+                        <option *ngFor="let m of monthName" 
+                        [selected]="m.month==monthV"    [value]="m.month">
                             {{m.name}} </option>
                     </select>
                 </span>
-
+                </div>
                 <!-- <div class="card flex justify-content-center">
     <p-dropdown (change)="changeSelect($event)"
      [options]="monthName" [(ngModel)]="monthV" optionLabel="name" optionValue="month"></p-dropdown>
@@ -87,6 +91,86 @@
             </div>
         </div>
         <!-- -->
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-9  mt-3">
+                <span class="p-float-label">
+                    <label><p style="color: rgb(15, 15, 17);">วิธีในการสร้างรหัสผ่านสำหรับรายงาน</p></label>
+                    </span>
+                    </div>
+                    </div>
+                    
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-9  mt-3">
+                <span class="p-float-label">
+
+                    <!-- [(ngModel)]="userName" -->
+                  
+                        <input type="radio" value="none" name="pwd" formControlName="pwdType"
+                            (change)="changePwdType($event)" [checked]="pwdType=='none'"> ไม่ใช้รหัสผ่านในการสร้างรายงาน 
+                       
+        
+                </span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-9  mt-3">
+                <span class="p-float-label">
+                    <!-- [(ngModel)]="userName" -->
+        
+                    <input type="radio" value="idcard" name="pwd" formControlName="pwdType" (change)="changePwdType($event)"
+                        [checked]="pwdType=='idcard'"> ใช้เลขบัตรประชาชนในการสร้างรหัสผ่าน13ตัวติดกัน
+        
+        
+                </span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-9  mt-3">
+                <span class="p-float-label">
+                    <!-- [(ngModel)]="userName" -->
+        
+                    <input type="radio" value="birthdate" name="pwd" formControlName="pwdType" (change)="changePwdType($event)"
+                        [checked]="pwdType=='birthdate'"> ใช้วันเกิดในการสร้างรหัสผ่าน(วันที่2หลักเดือน2หลักพศ4หลัก)
+        
+                </span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-9  mt-3">
+                <span class="p-float-label">
+                    <!-- [(ngModel)]="userName" -->
+        
+                    <input type="radio" value="custom" name="pwd" formControlName="pwdType" (change)="changePwdType($event)"
+                        [checked]="pwdType=='custom'"> กำหนดรหัสผ่านเอง
+        
+        
+                </span>
+            </div>
+        </div>
+
+<div *ngIf="pwdType =='custom'">
+<div class="form-group row">
+    <div class="col-12 col-sm-3"></div>
+    <div class="col-12 col-sm-5  mt-3">
+        <span class="label">
+            <!-- [(ngModel)]="userName" -->
+            <label for="pwdTax">รหัสผ่าน 3-10 ตัวอักษร</label>
+            <input id="pwdTax" name="pwdTax" type="password"  [(ngModel)]="pwdTax" pInputText ngModel
+                required minlength="3" maxlength="10" style="width:15rem ;" 
+                (change)="changePwdTax($event)">
+
+        </span>
+    </div>
+</div>
+</div>
+
+
+
         <div class="form-group row">
             <div class="col-12 col-sm-3"></div>
             <div class="col-12 col-sm-5  mt-3">
@@ -118,6 +202,10 @@
                 </button>
             </div>
         </div>
+        <!-- <div>
+            <iframe  src="{{urlPdf}}" width="100%" height="100%" frameborder="0"
+                style="flex: 1;"></iframe>
+        </div> -->
 
         <!-- <div class="form-group row">
             <div class="col-12 "></div>
